@@ -55,7 +55,8 @@ if ($user) {
         "id" => $userData->getId_user(),
         "nom" => $userData->getNom_user(),
         "prenom" => $userData->getPrenom_user(),
-        "email" => $userData->getLogin_user(),
+        "email" => $userData->getEmail_user(),
+        "login" => $userData->getLogin_user(),
         "role" => $userData->getRole_user()->getNom_role()
     ]);
 }
