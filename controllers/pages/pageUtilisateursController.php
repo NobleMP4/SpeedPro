@@ -95,7 +95,8 @@ class pageUtilisateursController {
                     if ($mailSent) {
                         $_SESSION['success_message'] .= " Les identifiants ont été envoyés par email.";
                     } else {
-                        $_SESSION['warning_message'] = "L'envoi de l'email a échoué. Login: $login, Mot de passe: $initial_password";
+                        error_log("Échec de l'envoi du mail pour l'utilisateur : $login");
+                        $_SESSION['warning_message'] = "L'envoi de l'email a échoué.";
                     }
                     
                     $_SESSION['new_user_login'] = $login;

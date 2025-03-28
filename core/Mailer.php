@@ -32,7 +32,21 @@ class Mailer {
         // Configuration des paramètres additionnels pour l'envoi SMTP
         $parameters = "-f noreply@edperso.fr";
         
+        // Log des informations d'envoi
+        error_log("Tentative d'envoi de mail à : " . $to);
+        error_log("Headers : " . print_r($headers, true));
+        error_log("Message : " . $message);
+        
         // Envoi du mail avec les paramètres SMTP
-        return mail($to, $subject, $message, $headers, $parameters);
+        $result = mail($to, $subject, $message, $headers, $parameters);
+        
+        // Log du résultat
+        error_log("Résultat de l'envoi : " . ($result ? "Succès" : "Échec"));
+        
+        if (!$result) {
+            error_log("Erreur d'envoi de mail - Erreur PHP : " . error_get_last()['message']);
+        }
+        
+        return $result;
     }
 } 
