@@ -310,23 +310,60 @@ function toggleUserPanel(button) {
             panelRow.style.display = 'none';
         }, 300);
     }
+
+    // Récupérer les données de l'utilisateur depuis les attributs data
+    const userId = button.getAttribute('data-user-id');
+    const userName = button.getAttribute('data-user-name');
+    const userLogin = button.getAttribute('data-user-login');
+    const userEmail = button.getAttribute('data-user-email');
+    
+    // Pré-remplir le formulaire d'édition
+    const editForm = panel.querySelector('.edit-form');
+    if (editForm) {
+        const [lastName, firstName] = userName.split(' ');
+        editForm.querySelector('#edit_nom').value = lastName;
+        editForm.querySelector('#edit_prenom').value = firstName;
+        editForm.querySelector('#edit_email').value = userEmail;
+        // ... rest of the code ...
+    }
 }
 
-function toggleEditForm(element, show) {
-    const panel = element.closest('.user-panel');
-    const editForm = panel.querySelector('.edit-form');
-    const button = panel.closest('tr').previousElementSibling.querySelector('.btn-edit');
-    
+function toggleEditForm(button, show) {
+    const panelContent = button.closest('.user-panel-content');
+    const editForm = panelContent.querySelector('.edit-form');
+    const actionsDiv = panelContent.querySelector('.user-modal-actions');
+    const userPanel = button.closest('.user-panel');
+
     if (show) {
+        // Afficher le formulaire
         editForm.style.display = 'block';
-        // Pré-remplir le formulaire avec les données existantes
-        const userName = button.getAttribute('data-user-name').split(' ');
-        const userEmail = button.getAttribute('data-user-email');
+        setTimeout(() => {
+            editForm.classList.add('show');
+            userPanel.classList.add('form-visible');
+        }, 50);
+        actionsDiv.style.display = 'none';
+
+        // Pré-remplir le formulaire avec les données actuelles
+        const tr = button.closest('.user-panel-row').previousElementSibling;
+        const userName = tr.querySelector('.user-name').textContent.split(' ');
+        const userRole = tr.querySelector('.role-badge').textContent;
         
         editForm.querySelector('#edit_nom').value = userName[0];
         editForm.querySelector('#edit_prenom').value = userName[1];
-        editForm.querySelector('#edit_email').value = userEmail;
+        
+        const roleSelect = editForm.querySelector('#edit_role');
+        Array.from(roleSelect.options).forEach(option => {
+            if (option.text === userRole) {
+                option.selected = true;
+            }
+        });
     } else {
-        editForm.style.display = 'none';
+        // Cacher le formulaire
+        editForm.classList.remove('show');
+        userPanel.classList.remove('form-visible');
+        setTimeout(() => {
+            editForm.style.display = 'none';
+            actionsDiv.style.display = 'flex';
+        }, 300);
     }
 }
