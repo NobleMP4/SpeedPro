@@ -1,0 +1,43 @@
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-sides">
+            <div class="login-left">
+                <div class="brand-section">
+                    <img src="assets/imgs/logo-php.png" alt="Logo Garage" class="logo">
+                </div>
+            </div>
+            
+            <div class="login-right">
+                <div class="login-content">
+                    <h1>Connexion</h1>
+                    <p class="subtitle">Espace administrateur</p>
+                    
+                    <form class="login-form" action="?p=login" method="POST">
+                        <div class="input-group">
+                            <div class="input-wrapper">
+                                <input type="text" id="email" name="login" placeholder="Identifiant">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <div class="input-wrapper">
+                                <input type="password" id="password" name="mdp" placeholder="Mot de passe">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="login-btn">
+                            <span>Se connecter</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+
+                        <div class="forgot-password">
+                            <a href="#">Mot de passe oublié ?</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

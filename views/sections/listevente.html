@@ -1,0 +1,58 @@
+<section class="vehicles-page">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Colonne de la liste des véhicules -->
+            <div class="col-lg-12 vehicles-column">
+                <div class="vehicles-section">
+                    <div class="vehicles-grid">
+                        {if isset($vehicules) && $vehicules|@count > 0}
+                            {foreach from=$vehicules item=vehicule}
+                                <div class="vehicle-card">
+                                    <div class="vehicle-image">
+                                        {if isset($vehicule->getUrl_image()) && $vehicule->getUrl_image()}
+                                            <img src="assets/imgs/vehicules/{$vehicule->getUrl_image()}" alt="{$vehicule->getAlt_image()|default:'Image du véhicule'}">
+                                        {else}
+                                            <img src="assets/imgs/default-vehicle.jpg" alt="Image par défaut">
+                                        {/if}
+                                        <span class="vehicle-price">{$vehicule->getPrix_vehicule()|number_format:2:',':" "} €</span>
+                                        <span class="vehicle-year">{$vehicule->getAnnee_vehicule()}</span>
+                                    </div>
+                                    <div class="vehicle-content">
+                                        <h3 class="vehicle-title">
+                                            {$vehicule->getNom_marque()|default:'Marque N/A'} 
+                                            {$vehicule->getNom_modele()|default:'Modèle N/A'}
+                                            {if isset($vehicule->getNom_generation()) && $vehicule->getNom_generation()}
+                                                {$vehicule->getNom_generation()}
+                                            {/if}
+                                        </h3>
+                                        <div class="vehicle-specs">
+                                            <div class="spec-item">
+                                                <i class="fas fa-tachometer-alt"></i>
+                                                <span>{$vehicule->getKilometrage_vehicule()|number_format:0:'':" "} km</span>
+                                            </div>
+                                            <div class="spec-item">
+                                                <i class="fas fa-gas-pump"></i>
+                                                <span>{$vehicule->getNom_carburant()|default:'Non spécifié'}</span>
+                                            </div>
+                                            <div class="spec-item">
+                                                <i class="fas fa-user"></i>
+                                                <span>Vendu à: {$vehicule->getNom_client_1()} {$vehicule->getPrenom_client_1()}</span>
+                                            </div>
+                                        </div>
+                                        <div class="vehicle-actions">
+                                            <a href="?p=vehiculeseul&id={$vehicule->getId_vehicule()}" class="btn-details">Voir détails</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {/foreach}
+                        {else}
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> Aucun véhicule vendu trouvé.
+                            </div>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

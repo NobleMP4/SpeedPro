@@ -1,0 +1,115 @@
+<div class="container-fluid">
+    <div class="clients-header">
+        <div class="search-bar">
+            <input type="text" class="form-control" placeholder="Rechercher un client...">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="openNewClientForm()">
+            <i class="fas fa-plus"></i> Nouveau dossier client
+        </button>
+    </div>
+
+    <div id="newClientFormSection" class="new-client-form-section" style="display: none;">
+        <div class="form-header">
+            <h2>Nouveau dossier client</h2>
+            <button type="button" class="close-form" onclick="closeNewClientForm()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="newClientForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="nom_client_1" class="form-label">Nom du client 1</label>
+                    <input type="text" class="form-control" id="nom_client_1" name="nom_client_1">
+                </div>
+                <div class="form-group">
+                    <label for="prenom_client_1" class="form-label">Prénom du client 1</label>
+                    <input type="text" class="form-control" id="prenom_client_1" name="prenom_client_1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="nom_client_2" class="form-label">Nom du client 2 (optionnel)</label>
+                    <input type="text" class="form-control" id="nom_client_2" name="nom_client_2">
+                </div>
+                <div class="form-group">
+                    <label for="prenom_client_2" class="form-label">Prénom du client 2 (optionnel)</label>
+                    <input type="text" class="form-control" id="prenom_client_2" name="prenom_client_2">
+                </div>
+
+                <div class="form-group">
+                    <label for="telephone_client_1" class="form-label">Téléphone client 1</label>
+                    <input type="tel" class="form-control" id="telephone_client_1" name="telephone_client_1">
+                </div>
+                <div class="form-group">
+                    <label for="telephone_client_2" class="form-label">Téléphone client 2 (optionnel)</label>
+                    <input type="tel" class="form-control" id="telephone_client_2" name="telephone_client_2">
+                </div>
+                <div class="form-group">
+                    <label for="email_client_1" class="form-label">Email client 1</label>
+                    <input type="email" class="form-control" id="email_client_1" name="email_client_1">
+                </div>
+                <div class="form-group">
+                    <label for="email_client_2" class="form-label">Email client 2 (optionnel)</label>
+                    <input type="email" class="form-control" id="email_client_2" name="email_client_2">
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="rue" class="form-label">Adresse</label>
+                    <input type="text" class="form-control" id="rue" name="rue">
+                </div>
+                <div class="form-group">
+                    <label for="code_postal" class="form-label">Code postal</label>
+                    <input type="text" class="form-control" id="code_postal" name="code_postal">
+                </div>
+                <div class="form-group">
+                    <label for="ville" class="form-label">Ville</label>
+                    <input type="text" class="form-control" id="ville" name="ville">
+                </div>
+                <div class="form-group">
+                    <label for="pays" class="form-label">Pays</label>
+                    <input type="text" class="form-control" id="pays" name="pays" value="France">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeNewClientForm()">Annuler</button>
+                <button class="btn btn-primary">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="clients-list">
+        {foreach $clients as $client}
+            <div class="client-item">
+                <div class="client-name">
+                    <a href="?p=client&id={$client->getId_client()}">
+                        {$client->getNom_client_1()|upper} {$client->getPrenom_client_1()}
+                        {if $client->getNom_client_2()}
+                            & {$client->getNom_client_2()|upper} {$client->getPrenom_client_2()}
+                        {/if}
+                    </a>
+                </div>
+                <div class="client-contact">
+                    <span>
+                        {assign var="tel1" value=$client->getTelephone_client_1()}
+                        {$tel1|substr:0:2}.{$tel1|substr:2:2}.{$tel1|substr:4:2}.{$tel1|substr:6:2}.{$tel1|substr:8:2}
+                        <br>
+                        {if $client->getTelephone_client_2()}
+                            {assign var="tel2" value=$client->getTelephone_client_2()}
+                            {$tel2|substr:0:2}.{$tel2|substr:2:2}.{$tel2|substr:4:2}.{$tel2|substr:6:2}.{$tel2|substr:8:2}
+                        {/if}
+                    </span>
+                    <span>{$client->getEmail_client_1()}
+                        <br>
+                        {$client->getEmail_client_2()}
+                    </span>
+                    <span>{$client->getAdresseComplete()}</span>
+                </div>
+                <div class="client-actions">
+                    <button class="btn btn-outline-danger btn-sm">
+                        Supprimer
+                    </button>
+                </div>
+            </div>
+        {/foreach}
+    </div>
+</div>
