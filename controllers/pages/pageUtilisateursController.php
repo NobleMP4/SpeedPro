@@ -13,6 +13,7 @@ class pageUtilisateursController {
             try {
                 $nom = trim($_POST['nom']);
                 $prenom = trim($_POST['prenom']);
+                $email = trim($_POST['email']);
                 
                 // Génération du login : prenom_p01 (p = première lettre du nom)
                 $login_base = strtolower($prenom . "_" . substr($nom, 0, 1));
@@ -62,17 +63,19 @@ class pageUtilisateursController {
                 $user->setNom_user($nom);
                 $user->setPrenom_user($prenom);
                 $user->setLogin_user($login);
+                $user->setEmail_user($email);
                 $user->setMdp_user(password_hash($initial_password, PASSWORD_DEFAULT));
                 $user->setId_role_user($_POST['role']);
 
                 // Ajout en base de données
-                $sql = "INSERT INTO user (id_user, nom_user, prenom_user, login_user, mdp_user, id_role_user) 
-                        VALUES (?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO user (id_user, nom_user, prenom_user, login_user, email_user, mdp_user, id_role_user) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?)";
                 $result = app::$db->prepare($sql, [
                     $user->getId_user(),
                     $user->getNom_user(),
                     $user->getPrenom_user(),
                     $user->getLogin_user(),
+                    $user->getEmail_user(),
                     $user->getMdp_user(),
                     $user->getId_role_user()
                 ], "monApp\\models\\user");
