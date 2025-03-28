@@ -3,7 +3,6 @@
 namespace monApp\controllers\pages;
 use monApp\core\app;
 use monApp\core\tools;
-use monApp\core\Mailer;
 use monApp\models\user;
 use PDO;
 
@@ -14,7 +13,6 @@ class pageUtilisateursController {
             try {
                 $nom = trim($_POST['nom']);
                 $prenom = trim($_POST['prenom']);
-                $email = trim($_POST['email']);
                 
                 // Génération du login : prenom_p01 (p = première lettre du nom)
                 $login_base = strtolower($prenom . "_" . substr($nom, 0, 1));
@@ -64,41 +62,23 @@ class pageUtilisateursController {
                 $user->setNom_user($nom);
                 $user->setPrenom_user($prenom);
                 $user->setLogin_user($login);
-                $user->setEmail_user($email);
                 $user->setMdp_user(password_hash($initial_password, PASSWORD_DEFAULT));
                 $user->setId_role_user($_POST['role']);
 
                 // Ajout en base de données
-                $sql = "INSERT INTO user (id_user, nom_user, prenom_user, login_user, email_user, mdp_user, id_role_user) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO user (id_user, nom_user, prenom_user, login_user, mdp_user, id_role_user) 
+                        VALUES (?, ?, ?, ?, ?, ?)";
                 $result = app::$db->prepare($sql, [
                     $user->getId_user(),
                     $user->getNom_user(),
                     $user->getPrenom_user(),
                     $user->getLogin_user(),
-                    $user->getEmail_user(),
                     $user->getMdp_user(),
                     $user->getId_role_user()
                 ], "monApp\\models\\user");
 
                 if($result) {
-                    // Envoi des identifiants par email
-                    $mailSent = Mailer::sendUserCredentials(
-                        $email,
-                        $nom,
-                        $prenom,
-                        $login,
-                        $initial_password
-                    );
-
                     $_SESSION['success_message'] = "Utilisateur créé avec succès !";
-                    if ($mailSent) {
-                        $_SESSION['success_message'] .= " Les identifiants ont été envoyés par email.";
-                    } else {
-                        error_log("Échec de l'envoi du mail pour l'utilisateur : $login");
-                        $_SESSION['warning_message'] = "L'envoi de l'email a échoué.";
-                    }
-                    
                     $_SESSION['new_user_login'] = $login;
                     $_SESSION['new_user_password'] = $initial_password;
                     header('Location: ?p=utilisateurs');

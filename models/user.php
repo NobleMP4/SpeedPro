@@ -18,7 +18,6 @@ class user extends table{
     private $mdp_user;
     private $id_role_user;
     private $password_user;
-    private $email_user;
 
     private $role_user;
    
@@ -89,15 +88,6 @@ class user extends table{
 
     public function getPassword_user() {
         return $this->password_user;
-    }
-
-    public function getEmail_user() {
-        return $this->email_user;
-    }
-
-    public function setEmail_user($email) {
-        $this->email_user = $email;
-        return $this;
     }
 
     public function save() {
