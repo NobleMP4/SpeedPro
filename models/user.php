@@ -104,8 +104,8 @@ class user extends table{
         try {
             if (isset($this->id_user)) {
                 // C'est une insertion car nous avons déjà un ID
-                $sql = "INSERT INTO user (id_user, nom_user, prenom_user, login_user, mdp_user, id_role_user) 
-                        VALUES (:id, :nom, :prenom, :login, :mdp, :role)";
+                $sql = "INSERT INTO user (id_user, nom_user, prenom_user, login_user, email_user, mdp_user, id_role_user) 
+                        VALUES (:id, :nom, :prenom, :login, :email, :mdp, :role)";
                 
                 $stmt = $this->getPdo()->prepare($sql);
                 $result = $stmt->execute([
@@ -113,6 +113,7 @@ class user extends table{
                     ':nom' => $this->nom_user,
                     ':prenom' => $this->prenom_user,
                     ':login' => $this->login_user,
+                    ':email' => $this->email_user,
                     ':mdp' => $this->mdp_user,
                     ':role' => $this->id_role_user
                 ]);

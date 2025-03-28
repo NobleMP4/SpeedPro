@@ -57,6 +57,7 @@
                     <tr>
                         <th>Utilisateur</th>
                         <th>Identifiant</th>
+                        <th>Email</th>
                         <th>Rôle</th>
                         <th>Actions</th>
                     </tr>
@@ -73,6 +74,7 @@
                             </div>
                         </td>
                         <td>{$user->getLogin_user()}</td>
+                        <td>{$user->getEmail_user()}</td>
                         <td>
                             <span class="role-badge role-{$user->getRole_user()->getNom_role()|lower}">{$user->getRole_user()->getNom_role()}</span>
                         </td>
@@ -99,6 +101,10 @@
                                             <div class="form-group">
                                                 <label for="edit_prenom">Prénom</label>
                                                 <input type="text" id="edit_prenom" name="prenom" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="edit_email">Email</label>
+                                                <input type="email" id="edit_email" name="email" class="form-control">
                                             </div>
                                             <div class="form-group">
                                                 <label for="edit_role">Rôle</label>
