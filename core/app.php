@@ -16,7 +16,7 @@ class app{
     public static $dispatcher;
 
     public static function db(){
-        self::$db = new database("localhost","u848917271_php","root","root");
+        self::$db = new database("193.203.168.53","u848917271_php","u848917271_estebanphp","Pipefeu2.");
     }
 
     public static function section($section){
