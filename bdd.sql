@@ -141,5 +141,6 @@ CREATE TABLE IF NOT EXISTS user (
     login_user VARCHAR(50) NOT NULL UNIQUE,
     mdp_user VARCHAR(255) NOT NULL,
     id_role_user INT,
+    email_user VARCHAR(255) NOT NULL,
     FOREIGN KEY (id_role_user) REFERENCES role(id_role)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

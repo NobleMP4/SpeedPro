@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.4.3, created on 2025-03-28 11:31:21
+/* Smarty version 5.4.3, created on 2025-03-28 18:00:22
   from 'file:views/sections/listeutilisateurs.html' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.3',
-  'unifunc' => 'content_67e688891b8d14_45836640',
+  'unifunc' => 'content_67e6e3b6dd74f4_14790582',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '3c8ad3bd4557f4086ff61d907ae1a25ef8e472a1' => 
     array (
       0 => 'views/sections/listeutilisateurs.html',
-      1 => 1743161479,
+      1 => 1743184773,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_67e688891b8d14_45836640 (\Smarty\Template $_smarty_tpl) {
+function content_67e6e3b6dd74f4_14790582 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/MAMP/htdocs/ProjetCours/SpeedPro/views/sections';
 ?><div class="users-list-container">
     <div class="users-header">
@@ -51,6 +51,11 @@ $_smarty_current_dir = '/Applications/MAMP/htdocs/ProjetCours/SpeedPro/views/sec
             <div class="form-group">
                 <label for="prenom">Prénom</label>
                 <input type="text" class="form-control" id="prenom" name="prenom" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
             </div>
             
             <div class="form-group">
