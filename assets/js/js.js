@@ -312,42 +312,21 @@ function toggleUserPanel(button) {
     }
 }
 
-function toggleEditForm(button, show) {
-    const panelContent = button.closest('.user-panel-content');
-    const editForm = panelContent.querySelector('.edit-form');
-    const actionsDiv = panelContent.querySelector('.user-modal-actions');
-    const userPanel = button.closest('.user-panel');
-
+function toggleEditForm(element, show) {
+    const panel = element.closest('.user-panel');
+    const editForm = panel.querySelector('.edit-form');
+    const button = panel.closest('tr').previousElementSibling.querySelector('.btn-edit');
+    
     if (show) {
-        // Afficher le formulaire
         editForm.style.display = 'block';
-        setTimeout(() => {
-            editForm.classList.add('show');
-            userPanel.classList.add('form-visible');
-        }, 50);
-        actionsDiv.style.display = 'none';
-
-        // Pré-remplir le formulaire avec les données actuelles
-        const tr = button.closest('.user-panel-row').previousElementSibling;
-        const userName = tr.querySelector('.user-name').textContent.split(' ');
-        const userRole = tr.querySelector('.role-badge').textContent;
+        // Pré-remplir le formulaire avec les données existantes
+        const userName = button.getAttribute('data-user-name').split(' ');
+        const userEmail = button.getAttribute('data-user-email');
         
         editForm.querySelector('#edit_nom').value = userName[0];
         editForm.querySelector('#edit_prenom').value = userName[1];
-        
-        const roleSelect = editForm.querySelector('#edit_role');
-        Array.from(roleSelect.options).forEach(option => {
-            if (option.text === userRole) {
-                option.selected = true;
-            }
-        });
+        editForm.querySelector('#edit_email').value = userEmail;
     } else {
-        // Cacher le formulaire
-        editForm.classList.remove('show');
-        userPanel.classList.remove('form-visible');
-        setTimeout(() => {
-            editForm.style.display = 'none';
-            actionsDiv.style.display = 'flex';
-        }, 300);
+        editForm.style.display = 'none';
     }
 }
