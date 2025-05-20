@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.4.3, created on 2025-03-27 13:36:39
+/* Smarty version 5.4.3, created on 2025-05-20 16:27:31
   from 'file:views/sections/infosclient.html' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.3',
-  'unifunc' => 'content_67e55467d11b59_66829122',
+  'unifunc' => 'content_682cad73be5db5_80847802',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '5dbd12bc1ca264ab3c5c580e527e3103231830c5' => 
     array (
       0 => 'views/sections/infosclient.html',
-      1 => 1743082598,
+      1 => 1747758420,
       2 => 'file',
     ),
   ),
@@ -20,15 +20,97 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_67e55467d11b59_66829122 (\Smarty\Template $_smarty_tpl) {
+function content_682cad73be5db5_80847802 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/MAMP/htdocs/ProjetCours/SpeedPro/views/sections';
 ?><div class="container-fluid">
     <div class="client-header">
         <h2>Détails du client</h2>
-        <button class="btn btn-primary" onclick="window.location.href='?p=editclient&id=<?php echo $_smarty_tpl->getValue('client')->getId_client();?>
-'">
-            Modifier
+        <button class="btn btn-primary" onclick="openEditClientForm()">
+            <i class="fas fa-edit"></i> Modifier
         </button>
+    </div>
+
+    <div id="editClientFormSection" class="edit-client-form-section" style="display: none;">
+        <div class="form-header">
+            <h2>Modifier les informations du client</h2>
+            <button type="button" class="close-form" onclick="closeEditClientForm()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="editClientForm">
+            <input type="hidden" name="id_client" value="<?php echo $_smarty_tpl->getValue('client')->getId_client();?>
+">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="edit_nom_client_1" class="form-label">Nom du client 1</label>
+                    <input type="text" class="form-control" id="edit_nom_client_1" name="nom_client_1" value="<?php echo $_smarty_tpl->getValue('client')->getNom_client_1();?>
+">
+                </div>
+                <div class="form-group">
+                    <label for="edit_prenom_client_1" class="form-label">Prénom du client 1</label>
+                    <input type="text" class="form-control" id="edit_prenom_client_1" name="prenom_client_1" value="<?php echo $_smarty_tpl->getValue('client')->getPrenom_client_1();?>
+">
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit_nom_client_2" class="form-label">Nom du client 2 (optionnel)</label>
+                    <input type="text" class="form-control" id="edit_nom_client_2" name="nom_client_2" value="<?php echo $_smarty_tpl->getValue('client')->getNom_client_2();?>
+">
+                </div>
+                <div class="form-group">
+                    <label for="edit_prenom_client_2" class="form-label">Prénom du client 2 (optionnel)</label>
+                    <input type="text" class="form-control" id="edit_prenom_client_2" name="prenom_client_2" value="<?php echo $_smarty_tpl->getValue('client')->getPrenom_client_2();?>
+">
+                </div>
+
+                <div class="form-group">
+                    <label for="edit_telephone_client_1" class="form-label">Téléphone client 1</label>
+                    <input type="tel" class="form-control" id="edit_telephone_client_1" name="telephone_client_1" value="<?php echo $_smarty_tpl->getValue('client')->getTelephone_client_1();?>
+">
+                </div>
+                <div class="form-group">
+                    <label for="edit_telephone_client_2" class="form-label">Téléphone client 2 (optionnel)</label>
+                    <input type="tel" class="form-control" id="edit_telephone_client_2" name="telephone_client_2" value="<?php echo $_smarty_tpl->getValue('client')->getTelephone_client_2();?>
+">
+                </div>
+                <div class="form-group">
+                    <label for="edit_email_client_1" class="form-label">Email client 1</label>
+                    <input type="email" class="form-control" id="edit_email_client_1" name="email_client_1" value="<?php echo $_smarty_tpl->getValue('client')->getEmail_client_1();?>
+">
+                </div>
+                <div class="form-group">
+                    <label for="edit_email_client_2" class="form-label">Email client 2 (optionnel)</label>
+                    <input type="email" class="form-control" id="edit_email_client_2" name="email_client_2" value="<?php echo $_smarty_tpl->getValue('client')->getEmail_client_2();?>
+">
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="edit_rue" class="form-label">Adresse</label>
+                    <input type="text" class="form-control" id="edit_rue" name="rue" value="<?php echo $_smarty_tpl->getValue('client')->getRue();?>
+">
+                </div>
+                <div class="form-group">
+                    <label for="edit_code_postal" class="form-label">Code postal</label>
+                    <input type="text" class="form-control" id="edit_code_postal" name="code_postal" value="<?php echo $_smarty_tpl->getValue('client')->getCode_postal();?>
+">
+                </div>
+                <div class="form-group">
+                    <label for="edit_ville" class="form-label">Ville</label>
+                    <input type="text" class="form-control" id="edit_ville" name="ville" value="<?php echo $_smarty_tpl->getValue('client')->getVille();?>
+">
+                </div>
+                <div class="form-group">
+                    <label for="edit_pays" class="form-label">Pays</label>
+                    <input type="text" class="form-control" id="edit_pays" name="pays" value="<?php echo $_smarty_tpl->getValue('client')->getPays();?>
+">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeEditClientForm()">Annuler</button>
+                <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+            </div>
+        </form>
     </div>
 
     <div class="client-details">

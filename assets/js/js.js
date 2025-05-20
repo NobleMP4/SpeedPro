@@ -506,3 +506,50 @@ function filtrerClientsVue() {
         }
     }
 }
+
+function openEditClientForm() {
+    const formSection = document.getElementById('editClientFormSection');
+    formSection.style.display = 'block';
+    setTimeout(() => {
+        formSection.classList.add('show');
+    }, 50);
+    formSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+function closeEditClientForm() {
+    const formSection = document.getElementById('editClientFormSection');
+    formSection.classList.remove('show');
+    setTimeout(() => {
+        formSection.style.display = 'none';
+    }, 300);
+}
+
+// Gestion du formulaire d'édition de client
+document.addEventListener('DOMContentLoaded', function() {
+    const editClientForm = document.getElementById('editClientForm');
+    if (editClientForm) {
+        editClientForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            formData.append('action', 'editClient');
+            
+            fetch('?p=clients', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Erreur lors de la modification du client');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur est survenue');
+            });
+        });
+    }
+});
