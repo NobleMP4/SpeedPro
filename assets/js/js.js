@@ -367,3 +367,142 @@ function toggleEditForm(button, show) {
         }, 300);
     }
 }
+
+function handleVenduChange(checked) {
+    const clientSelection = document.getElementById('client-selection');
+    const submitButton = document.getElementById('submit-button');
+    const statutInput = document.getElementById('statut');
+    
+    if (checked) {
+        clientSelection.style.display = 'block';
+        submitButton.style.display = 'block';
+        statutInput.value = 'Vendu';
+    } else {
+        clientSelection.style.display = 'none';
+        submitButton.style.display = 'none';
+        statutInput.value = 'Disponible';
+    }
+}
+
+function filterClients(searchText) {
+    const clientsList = document.getElementById('clients-list');
+    const clientOptions = document.querySelectorAll('.client-option');
+    
+    if (searchText.length > 0) {
+        clientsList.style.display = 'block';
+        
+        clientOptions.forEach(option => {
+            const clientName = option.textContent.toLowerCase();
+            if (clientName.includes(searchText.toLowerCase())) {
+                option.style.display = 'block';
+            } else {
+                option.style.display = 'none';
+            }
+        });
+    } else {
+        clientsList.style.display = 'none';
+    }
+}
+
+function selectClient(clientId, clientName) {
+    const searchInput = document.getElementById('client-search');
+    const idClientInput = document.getElementById('id_client');
+    const clientsList = document.getElementById('clients-list');
+    
+    searchInput.value = clientName;
+    idClientInput.value = clientId;
+    clientsList.style.display = 'none';
+}
+
+function vendreVehicule(event) {
+    event.preventDefault();
+    
+    const formData = new FormData(event.target);
+    const idVehicule = formData.get('id_vehicule');
+    const idClient = formData.get('id_client');
+    const statut = formData.get('statut');
+
+    if (!idClient && statut === 'Vendu') {
+        alert('Veuillez sélectionner un client');
+        return;
+    }
+
+    // Ici, vous pouvez ajouter votre logique AJAX pour envoyer les données au serveur
+    // Par exemple :
+    fetch('votre_endpoint_api', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert('Une erreur est survenue lors de la mise à jour du statut');
+        }
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        alert('Une erreur est survenue');
+    });
+}
+
+// Fonction de filtrage des clients
+function filtrerClients() {
+    // Récupération de la valeur de recherche
+    var texte = document.getElementById("clientSearch").value.toLowerCase();
+    
+    // Sélection de tous les éléments client
+    var clients = document.getElementsByClassName("client-item");
+    
+    // Parcourir chaque client
+    for (var i = 0; i < clients.length; i++) {
+        // Récupération du texte du client
+        var contenu = clients[i].textContent || clients[i].innerText;
+        contenu = contenu.toLowerCase();
+        
+        // Afficher ou masquer en fonction de la recherche
+        if (contenu.indexOf(texte) > -1) {
+            clients[i].style.display = "";
+        } else {
+            clients[i].style.display = "none";
+        }
+    }
+}
+
+// Fonction d'initialisation au chargement de la page
+function initialiserRecherche() {
+    // Récupération de l'élément de recherche
+    var recherche = document.getElementById("clientSearch");
+    
+    // Vérifier si l'élément existe et ajouter l'événement
+    if (recherche) {
+        recherche.addEventListener('input', filtrerClients);
+    }
+}
+
+// Exécuter l'initialisation quand la page est chargée
+window.onload = initialiserRecherche;
+
+// Fonction de filtrage en temps réel
+function filtrerClientsVue() {
+    // Récupération de la valeur de recherche
+    var texte = document.getElementById("clientSearch").value.toLowerCase();
+    
+    // Sélection de tous les éléments client
+    var clients = document.getElementsByClassName("client-item");
+    
+    // Parcourir chaque client
+    for (var i = 0; i < clients.length; i++) {
+        // Récupération du texte du client
+        var contenu = clients[i].textContent || clients[i].innerText;
+        contenu = contenu.toLowerCase();
+        
+        // Afficher ou masquer en fonction de la recherche
+        if (contenu.indexOf(texte) > -1) {
+            clients[i].style.display = "";
+        } else {
+            clients[i].style.display = "none";
+        }
+    }
+}

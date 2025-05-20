@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.4.3, created on 2025-03-25 13:39:31
+/* Smarty version 5.4.3, created on 2025-04-16 20:33:15
   from 'file:views/sections/headerlogin.html' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.3',
-  'unifunc' => 'content_67e2b21367b0e1_48682225',
+  'unifunc' => 'content_6800140ba91197_83184563',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'add56d8d49993c1bb40fa8e4ea17e6d774ccd481' => 
     array (
       0 => 'views/sections/headerlogin.html',
-      1 => 1742909952,
+      1 => 1744293770,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_67e2b21367b0e1_48682225 (\Smarty\Template $_smarty_tpl) {
+function content_6800140ba91197_83184563 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/MAMP/htdocs/ProjetCours/SpeedPro/views/sections';
 ?><!DOCTYPE html>
 <html lang="fr">
@@ -51,6 +51,10 @@ $_smarty_current_dir = '/Applications/MAMP/htdocs/ProjetCours/SpeedPro/views/sec
     <link rel="stylesheet/less" type="text/css" href="assets/style/style.less" />
     <?php echo '<script'; ?>
  src="https://cdn.jsdelivr.net/npm/less" ><?php echo '</script'; ?>
+>
+
+    <?php echo '<script'; ?>
+ src="assets/js/js.js"><?php echo '</script'; ?>
 >
 </head>
 <body><?php }

@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="clients-header">
         <div class="search-bar">
-            <input type="text" class="form-control" placeholder="Rechercher un client...">
+            <input type="text" class="form-control" placeholder="Rechercher un client..." value="{$searchTerm|default:''}" id="clientSearch" oninput="filtrerClientsVue()">
         </div>
         <button type="button" class="btn btn-primary" onclick="openNewClientForm()">
             <i class="fas fa-plus"></i> Nouveau dossier client
@@ -77,9 +77,10 @@
         </form>
     </div>
 
-    <div class="clients-list">
+    <div id="clientsList" class="clients-list">
         {foreach $clients as $client}
-            <div class="client-item">
+            <div class="client-item" 
+                data-search="{$client->getNom_client_1()|lower} {$client->getPrenom_client_1()|lower} {$client->getEmail_client_1()|lower} {$client->getTelephone_client_1()|lower} {$client->getRue()|lower} {$client->getCode_postal()|lower} {$client->getVille()|lower} {$client->getPays()|lower}">
                 <div class="client-name">
                     <a href="?p=client&id={$client->getId_client()}">
                         {$client->getNom_client_1()|upper} {$client->getPrenom_client_1()}

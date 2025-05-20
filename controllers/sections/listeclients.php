@@ -4,11 +4,69 @@ use monApp\core\tpl;
 use monApp\core\app;
 use monApp\models\clients;
 
+// Récupération du terme de recherche
+$searchTerm = isset($_GET['search']) ? trim($_GET['search']) : '';
+
 // Récupérer tous les clients
 $clients = clients::tous();
 
+// Filtrage des clients si un terme de recherche est présent
+if (!empty($searchTerm)) {
+    $searchTerm = strtolower($searchTerm);
+    $filteredClients = array();
+    
+    foreach ($clients as $client) {
+        $match = false;
+        
+        // Vérification du nom et prénom du client 1
+        if (stripos($client->getNom_client_1(), $searchTerm) !== false ||
+            stripos($client->getPrenom_client_1(), $searchTerm) !== false) {
+            $match = true;
+        }
+        
+        // Vérification du nom et prénom du client 2 (si existe)
+        if (!$match && $client->getNom_client_2() && $client->getPrenom_client_2()) {
+            if (stripos($client->getNom_client_2(), $searchTerm) !== false ||
+                stripos($client->getPrenom_client_2(), $searchTerm) !== false) {
+                $match = true;
+            }
+        }
+        
+        // Vérification des emails
+        if (!$match) {
+            if (stripos($client->getEmail_client_1(), $searchTerm) !== false ||
+                ($client->getEmail_client_2() && stripos($client->getEmail_client_2(), $searchTerm) !== false)) {
+                $match = true;
+            }
+        }
+        
+        // Vérification des téléphones
+        if (!$match) {
+            if (stripos($client->getTelephone_client_1(), $searchTerm) !== false ||
+                ($client->getTelephone_client_2() && stripos($client->getTelephone_client_2(), $searchTerm) !== false)) {
+                $match = true;
+            }
+        }
+        
+        // Vérification de l'adresse
+        if (!$match) {
+            $adresse = $client->getRue() . ' ' . $client->getCode_postal() . ' ' . $client->getVille() . ' ' . $client->getPays();
+            if (stripos($adresse, $searchTerm) !== false) {
+                $match = true;
+            }
+        }
+        
+        if ($match) {
+            $filteredClients[] = $client;
+        }
+    }
+    
+    $clients = $filteredClients;
+}
+
 // Passer les données à la vue
 tpl::assign('clients', $clients);
+tpl::assign('searchTerm', $searchTerm);
 
 // Gérer l'action de création
 if(isset($_GET['action']) && $_GET['action'] === 'create' && $_SERVER['REQUEST_METHOD'] === 'POST') {

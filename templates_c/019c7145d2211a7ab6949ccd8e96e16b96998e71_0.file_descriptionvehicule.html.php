@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.4.3, created on 2025-03-27 12:13:56
+/* Smarty version 5.4.3, created on 2025-04-10 11:48:58
   from 'file:views/sections/descriptionvehicule.html' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.3',
-  'unifunc' => 'content_67e54104233756_47033649',
+  'unifunc' => 'content_67f7b02acc20b8_85082425',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '019c7145d2211a7ab6949ccd8e96e16b96998e71' => 
     array (
       0 => 'views/sections/descriptionvehicule.html',
-      1 => 1743077634,
+      1 => 1744285663,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_67e54104233756_47033649 (\Smarty\Template $_smarty_tpl) {
+function content_67f7b02acc20b8_85082425 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/MAMP/htdocs/ProjetCours/SpeedPro/views/sections';
 ?><div class="vehicle-details-container">
     <div class="vehicle-header">

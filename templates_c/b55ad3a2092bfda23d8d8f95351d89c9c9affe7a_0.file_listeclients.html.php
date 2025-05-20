@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.4.3, created on 2025-03-27 13:35:50
+/* Smarty version 5.4.3, created on 2025-05-20 16:10:51
   from 'file:views/sections/listeclients.html' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.3',
-  'unifunc' => 'content_67e55436128123_44003169',
+  'unifunc' => 'content_682ca98b5bfe94_68541518',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'b55ad3a2092bfda23d8d8f95351d89c9c9affe7a' => 
     array (
       0 => 'views/sections/listeclients.html',
-      1 => 1743082548,
+      1 => 1747757442,
       2 => 'file',
     ),
   ),
@@ -20,12 +20,13 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_67e55436128123_44003169 (\Smarty\Template $_smarty_tpl) {
+function content_682ca98b5bfe94_68541518 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/MAMP/htdocs/ProjetCours/SpeedPro/views/sections';
 ?><div class="container-fluid">
     <div class="clients-header">
         <div class="search-bar">
-            <input type="text" class="form-control" placeholder="Rechercher un client...">
+            <input type="text" class="form-control" placeholder="Rechercher un client..." value="<?php echo (($tmp = $_smarty_tpl->getValue('searchTerm') ?? null)===null||$tmp==='' ? '' ?? null : $tmp);?>
+" id="clientSearch" oninput="filtrerClientsVue()">
         </div>
         <button type="button" class="btn btn-primary" onclick="openNewClientForm()">
             <i class="fas fa-plus"></i> Nouveau dossier client
@@ -101,14 +102,23 @@ $_smarty_current_dir = '/Applications/MAMP/htdocs/ProjetCours/SpeedPro/views/sec
         </form>
     </div>
 
-    <div class="clients-list">
+    <div id="clientsList" class="clients-list">
         <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('clients'), 'client');
 $foreach0DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('client')->value) {
 $foreach0DoElse = false;
 ?>
-            <div class="client-item">
+            <div class="client-item" 
+                data-search="<?php echo mb_strtolower((string) $_smarty_tpl->getValue('client')->getNom_client_1(), 'UTF-8');?>
+ <?php echo mb_strtolower((string) $_smarty_tpl->getValue('client')->getPrenom_client_1(), 'UTF-8');?>
+ <?php echo mb_strtolower((string) $_smarty_tpl->getValue('client')->getEmail_client_1(), 'UTF-8');?>
+ <?php echo mb_strtolower((string) $_smarty_tpl->getValue('client')->getTelephone_client_1(), 'UTF-8');?>
+ <?php echo mb_strtolower((string) $_smarty_tpl->getValue('client')->getRue(), 'UTF-8');?>
+ <?php echo mb_strtolower((string) $_smarty_tpl->getValue('client')->getCode_postal(), 'UTF-8');?>
+ <?php echo mb_strtolower((string) $_smarty_tpl->getValue('client')->getVille(), 'UTF-8');?>
+ <?php echo mb_strtolower((string) $_smarty_tpl->getValue('client')->getPays(), 'UTF-8');?>
+">
                 <div class="client-name">
                     <a href="?p=client&id=<?php echo $_smarty_tpl->getValue('client')->getId_client();?>
 ">

@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.4.3, created on 2025-03-28 11:23:41
+/* Smarty version 5.4.3, created on 2025-04-04 17:37:53
   from 'file:views/sections/monprofil.html' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.3',
-  'unifunc' => 'content_67e686bd112f58_83347285',
+  'unifunc' => 'content_67f018f1f0f629_11497103',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '135de53886828675a229a2f5376551161fd1486e' => 
     array (
       0 => 'views/sections/monprofil.html',
-      1 => 1743161020,
+      1 => 1743186666,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_67e686bd112f58_83347285 (\Smarty\Template $_smarty_tpl) {
+function content_67f018f1f0f629_11497103 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/MAMP/htdocs/ProjetCours/SpeedPro/views/sections';
 ?><div class="profile-container">
     <div class="profile-header">
@@ -53,6 +53,11 @@ $_smarty_current_dir = '/Applications/MAMP/htdocs/ProjetCours/SpeedPro/views/sec
                 </div>
                 <div class="info-item">
                     <label>Login</label>
+                    <p><?php echo $_smarty_tpl->getValue('profil')['login'];?>
+</p>
+                </div>
+                <div class="info-item">
+                    <label>Email</label>
                     <p><?php echo $_smarty_tpl->getValue('profil')['email'];?>
 </p>
                 </div>

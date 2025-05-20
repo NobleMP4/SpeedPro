@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.4.3, created on 2025-03-26 10:48:13
+/* Smarty version 5.4.3, created on 2025-04-10 14:01:38
   from 'file:views/sections/footer.html' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.3',
-  'unifunc' => 'content_67e3db6d9678f0_59992642',
+  'unifunc' => 'content_67f7cf429e1e74_92311859',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '3605fec40248d2f2cf281bcf63515cf47474458a' => 
     array (
       0 => 'views/sections/footer.html',
-      1 => 1742986093,
+      1 => 1744293691,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_67e3db6d9678f0_59992642 (\Smarty\Template $_smarty_tpl) {
+function content_67f7cf429e1e74_92311859 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/MAMP/htdocs/ProjetCours/SpeedPro/views/sections';
 ?><!-- FOOTER-->
 <footer class="garage-footer">
@@ -50,7 +50,6 @@ $_smarty_current_dir = '/Applications/MAMP/htdocs/ProjetCours/SpeedPro/views/sec
     </div>
 </footer>
 
-<?php echo '<script'; ?>
- src="assets/js/js.js"><?php echo '</script'; ?>
-><?php }
+</body>
+</html><?php }
 }

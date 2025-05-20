@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.4.3, created on 2025-03-28 18:00:22
+/* Smarty version 5.4.3, created on 2025-04-16 20:33:46
   from 'file:views/sections/listeutilisateurs.html' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.4.3',
-  'unifunc' => 'content_67e6e3b6dd74f4_14790582',
+  'unifunc' => 'content_6800142a9a8b41_78924599',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '3c8ad3bd4557f4086ff61d907ae1a25ef8e472a1' => 
     array (
       0 => 'views/sections/listeutilisateurs.html',
-      1 => 1743184773,
+      1 => 1744292752,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_67e6e3b6dd74f4_14790582 (\Smarty\Template $_smarty_tpl) {
+function content_6800142a9a8b41_78924599 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/MAMP/htdocs/ProjetCours/SpeedPro/views/sections';
 ?><div class="users-list-container">
     <div class="users-header">
@@ -90,6 +90,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     <tr>
                         <th>Utilisateur</th>
                         <th>Identifiant</th>
+                        <th>Email</th>
                         <th>Rôle</th>
                         <th>Actions</th>
                     </tr>
@@ -114,6 +115,8 @@ $foreach1DoElse = false;
                         </td>
                         <td><?php echo $_smarty_tpl->getValue('user')->getLogin_user();?>
 </td>
+                        <td><?php echo $_smarty_tpl->getValue('user')->getEmail_user();?>
+</td>
                         <td>
                             <span class="role-badge role-<?php echo mb_strtolower((string) $_smarty_tpl->getValue('user')->getRole_user()->getNom_role(), 'UTF-8');?>
 "><?php echo $_smarty_tpl->getValue('user')->getRole_user()->getNom_role();?>
@@ -128,6 +131,8 @@ $foreach1DoElse = false;
  <?php echo $_smarty_tpl->getValue('user')->getPrenom_user();?>
 "
                                     data-user-login="<?php echo $_smarty_tpl->getValue('user')->getLogin_user();?>
+"
+                                    data-user-email="<?php echo $_smarty_tpl->getValue('user')->getEmail_user();?>
 ">
                                 <i class="fas fa-edit"></i>
                             </button>
@@ -146,6 +151,10 @@ $foreach1DoElse = false;
                                             <div class="form-group">
                                                 <label for="edit_prenom">Prénom</label>
                                                 <input type="text" id="edit_prenom" name="prenom" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="edit_email">Email</label>
+                                                <input type="email" id="edit_email" name="email" class="form-control">
                                             </div>
                                             <div class="form-group">
                                                 <label for="edit_role">Rôle</label>
