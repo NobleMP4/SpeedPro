@@ -17,7 +17,7 @@ class app{
 
     public static function db(){
         try {
-            self::$db = new database("localhost","sp","root","root");
+            self::$db = new database("193.203.168.53:3306","u848917271_speedpro","u848917271_estebanphpdisi","Pipefeu2.");
             // Debug - Vérification de la connexion
             echo "<!-- Debug connexion BDD : OK -->";
         } catch (Exception $e) {
