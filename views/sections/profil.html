@@ -1,0 +1,86 @@
+<!-- Page Profil -->
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="header-content">
+            <h1><i class="fas fa-user-circle me-2"></i>Mon Profil</h1>
+        </div>
+    </div>
+
+    {if isset($message)}
+        <div class="alert alert-{if $messageType == 'success'}success{else}danger{/if} alert-dismissible fade show" role="alert">
+            {$message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {/if}
+
+    <div class="row">
+        <div class="col-12">
+            <!-- Informations personnelles -->
+            <div class="profile-card">
+                <h3 class="card-title"><i class="fas fa-user me-2"></i>Informations personnelles</h3>
+                <div class="profile-info-list">
+                    <div class="info-item">
+                        <span class="info-label">Nom</span>
+                        <span class="info-value">{$userInfo.nom_user}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Prénom</span>
+                        <span class="info-value">{$userInfo.prenom_user}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Email</span>
+                        <span class="info-value">{$userInfo.email_user}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Identifiant</span>
+                        <span class="info-value">{$userInfo.login_user}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Rôle</span>
+                        <span class="info-value">{$userInfo.nom_role}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">N°ID</span>
+                        <span class="info-value">{$userInfo.id_user}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Date de création</span>
+                        <span class="info-value">{$userInfo.date_creation_user|date_format:"%d/%m/%Y"}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sécurité -->
+            <div class="profile-card">
+                <h3 class="card-title"><i class="fas fa-shield-alt me-2"></i>Sécurité</h3>
+                <form id="securityForm" method="post" action="?p=profil">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="currentPassword">Mot de passe actuel</label>
+                                <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="newPassword">Nouveau mot de passe</label>
+                                <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirmer le mot de passe</label>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-key me-2"></i>Changer le mot de passe
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

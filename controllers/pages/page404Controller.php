@@ -2,10 +2,10 @@
 
 namespace monApp\controllers\pages;
 
-    class page404Controller{
-        public function index(){
-            require "views/pages/404.php";
-        }
+class page404Controller{
+    public function index(){
+        require "views/pages/404.php";
     }
+}
 
 ?>

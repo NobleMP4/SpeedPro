@@ -3,15 +3,17 @@
 namespace monApp\core;
 
 use monApp\controllers\pages\page404Controller;
-use monApp\controllers\pages\pageHomeController;
 use monApp\controllers\pages\pageLoginController;
-use monApp\controllers\pages\pageClientController;
+use monApp\controllers\pages\pageHomeController;
+use monApp\controllers\pages\pageConfigController;
+use monApp\controllers\pages\pageOptionsController;
+use monApp\controllers\pages\pageCarburantsController;
 use monApp\controllers\pages\pageClientsController;
-use monApp\controllers\pages\pageVehiculesController;
-use monApp\controllers\pages\pageVehiculeseulController;
 use monApp\controllers\pages\pageVenteController;
-use monApp\controllers\pages\pageGestionController;
-
+use monApp\controllers\pages\pageUtilisateursController;
+use monApp\controllers\pages\pageProfilController;
+use monApp\controllers\pages\pageClientController;
+use monApp\controllers\pages\pageVehiculeController;
 class dispatcher{
     public function dispatch($route){
         if(!$route){

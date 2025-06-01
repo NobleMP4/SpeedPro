@@ -3,9 +3,15 @@ namespace monApp\models;
 
 use monApp\core\table;
 use monApp\core\app;
+use monApp\models\vehicules;
 
 class clients extends table {
     protected static $key = 'id_client';
+    protected static $table = 'clients';
+    
+    public static function getTable() {
+        return static::$table;
+    }
     
     protected $id_client;
     protected $nom_client_1;
@@ -20,6 +26,7 @@ class clients extends table {
     protected $code_postal;
     protected $ville;
     protected $pays;
+    protected $date_creation_client;
 
     // Getters et Setters
     public function getId_client() { return $this->id_client; }
@@ -40,13 +47,36 @@ class clients extends table {
     public function getEmail_client_1() { return $this->email_client_1; }
     public function setEmail_client_1($value) { $this->email_client_1 = $value; return $this; }
 
-    public function getTelephone_client_1() { return $this->telephone_client_1; }
+    private function formatPhoneNumber($phone) {
+        if (!$phone) return '';
+        
+        // Supprimer tous les caractères non numériques
+        $phone = preg_replace('/[^0-9]/', '', $phone);
+        
+        // Si le numéro commence par +33 ou 33, le convertir en 0
+        if (substr($phone, 0, 2) === '33') {
+            $phone = '0' . substr($phone, 2);
+        }
+        
+        // Si le numéro a 10 chiffres, le formater
+        if (strlen($phone) === 10) {
+            return chunk_split($phone, 2, ' ');
+        }
+        
+        return $phone;
+    }
+
+    public function getTelephone_client_1() { 
+        return $this->formatPhoneNumber($this->telephone_client_1);
+    }
     public function setTelephone_client_1($value) { $this->telephone_client_1 = $value; return $this; }
 
     public function getEmail_client_2() { return $this->email_client_2; }
     public function setEmail_client_2($value) { $this->email_client_2 = $value; return $this; }
 
-    public function getTelephone_client_2() { return $this->telephone_client_2; }
+    public function getTelephone_client_2() { 
+        return $this->formatPhoneNumber($this->telephone_client_2);
+    }
     public function setTelephone_client_2($value) { $this->telephone_client_2 = $value; return $this; }
 
     public function getRue() { return $this->rue; }
@@ -60,6 +90,9 @@ class clients extends table {
 
     public function getPays() { return $this->pays; }
     public function setPays($value) { $this->pays = $value; return $this; }
+
+    public function getDate_creation_client() { return $this->date_creation_client; }
+    public function setDate_creation_client($value) { $this->date_creation_client = $value; return $this; }
 
     // Méthode pour obtenir l'adresse complète
     public function getAdresseComplete() {
@@ -117,6 +150,13 @@ class clients extends table {
 
     // Relations
     public function getVehicules() {
-        return vehicules::all(['conditions' => ['id_client' => $this->id_client]]);
+        $conditions = [
+            [
+                "champs" => "id_client",
+                "op" => "=",
+                "valeur" => $this->id_client
+            ]
+        ];
+        return vehicules::specifique($conditions);
     }
 } 

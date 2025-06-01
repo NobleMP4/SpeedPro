@@ -1,0 +1,377 @@
+<!-- Gestion des clients -->
+<div class="clients-container">
+    <!-- Messages de notification -->
+    {if isset($success)}
+        <div class="alert alert-success alert-dismissible fade show animate__animated animate__fadeIn" role="alert">
+            {if $success == 'add'}
+                <i class="fas fa-check-circle me-2"></i>Le client a été ajouté avec succès.
+            {elseif $success == 'edit'}
+                <i class="fas fa-check-circle me-2"></i>Le client a été modifié avec succès.
+            {elseif $success == 'delete'}
+                <i class="fas fa-check-circle me-2"></i>Le client a été supprimé avec succès.
+            {/if}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {/if}
+
+    {if isset($error)}
+        <div class="alert alert-danger alert-dismissible fade show animate__animated animate__fadeIn" role="alert">
+            {if $error == 'delete'}
+                <i class="fas fa-exclamation-circle me-2"></i>Une erreur est survenue lors de la suppression du client.
+            {/if}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {/if}
+
+    <!-- Contenu principal -->
+    <div class="row">
+        <div class="col-12">
+            <div class="clients-card">
+                <div class="clients-header">
+                    <div class="header-left">
+                        <h2><i class="fas fa-users me-2"></i>Liste des clients</h2>
+                        <div class="clients-count">
+                            <span class="badge bg-primary">{count($clients)} clients</span>
+                        </div>
+                    </div>
+                    <div class="header-right">
+                        {if $canAdd}
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addClientModal">
+                            <i class="fas fa-plus me-2"></i>Ajouter un client
+                        </button>
+                        {/if}
+                    </div>
+                </div>
+
+                <div class="clients-tools">
+                    <div class="search-box">
+                        <input type="text" class="form-control" id="searchClient" placeholder="Rechercher un client...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+
+                <div class="clients-list">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Contact Principal</th>
+                                    <th>Contact Secondaire</th>
+                                    <th>Adresse</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {foreach $clients as $client}
+                                <tr>
+                                    <td>
+                                        <div class="client-info">
+                                            <div class="client-avatar">
+                                                <span class="avatar-placeholder">
+                                                    {if !empty($client->getPrenom_client_1()) && !empty($client->getNom_client_1())}
+                                                        {$client->getPrenom_client_1()|truncate:1:""}{$client->getNom_client_1()|truncate:1:""}
+                                                    {else}
+                                                        --
+                                                    {/if}
+                                                </span>
+                                            </div>
+                                            <div class="client-details">
+                                                <span class="client-name">
+                                                    {if !empty($client->getPrenom_client_1()) && !empty($client->getNom_client_1())}
+                                                        {$client->getPrenom_client_1()|capitalize} {$client->getNom_client_1()|upper}
+                                                    {else}
+                                                        Information non disponible
+                                                    {/if}
+                                                </span>
+                                                <div class="client-contact mt-2">
+                                                    {if !empty($client->getEmail_client_1())}
+                                                        <div class="contact-item">
+                                                            <i class="fas fa-envelope"></i>
+                                                            {$client->getEmail_client_1()}
+                                                        </div>
+                                                    {/if}
+                                                    {if !empty($client->getTelephone_client_1())}
+                                                        <div class="contact-item">
+                                                            <i class="fas fa-phone"></i>
+                                                            {$client->getTelephone_client_1()}
+                                                        </div>
+                                                    {/if}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {if $client->getNom_client_2() && $client->getPrenom_client_2()}
+                                            <div class="client-info">
+                                                <div class="client-avatar">
+                                                    <span class="avatar-placeholder">
+                                                        {$client->getPrenom_client_2()|truncate:1:""}{$client->getNom_client_2()|truncate:1:""}
+                                                    </span>
+                                                </div>
+                                                <div class="client-details">
+                                                    <span class="client-name">
+                                                        {$client->getPrenom_client_2()|capitalize} {$client->getNom_client_2()|upper}
+                                                    </span>
+                                                    <div class="client-contact mt-2">
+                                                        {if $client->getEmail_client_2()}
+                                                            <div class="contact-item">
+                                                                <i class="fas fa-envelope"></i>
+                                                                {$client->getEmail_client_2()}
+                                                            </div>
+                                                        {/if}
+                                                        {if $client->getTelephone_client_2()}
+                                                            <div class="contact-item">
+                                                                <i class="fas fa-phone"></i>
+                                                                {$client->getTelephone_client_2()}
+                                                            </div>
+                                                        {/if}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {else}
+                                            <span class="text-light">
+                                                <i class="fas fa-user-slash me-2"></i>
+                                                Aucun contact secondaire
+                                            </span>
+                                        {/if}
+                                    </td>
+                                    <td>
+                                        <div class="client-address">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            {if $client->getRue() && $client->getCode_postal() && $client->getVille() && $client->getPays()}
+                                                {$client->getAdresseComplete()}
+                                            {else}
+                                                <span class="text-light">Adresse non renseignée</span>
+                                            {/if}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="client-actions">
+                                            <a href="?p=client&id={$client->getId_client()}" class="btn btn-icon" title="Voir détails">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            {if $canDelete}
+                                            <button class="btn btn-icon text-danger" title="Supprimer" data-bs-toggle="modal" data-bs-target="#deleteClientModal{$client->getId_client()}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                            {/if}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {foreachelse}
+                                <tr>
+                                    <td colspan="4" class="text-center py-4">
+                                        <i class="fas fa-info-circle me-2"></i>Aucun client trouvé
+                                    </td>
+                                </tr>
+                                {/foreach}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Ajout Client -->
+{if $canAdd}
+<div class="modal fade" id="addClientModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-user-plus me-2"></i>Ajouter un client</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            {if isset($errors) && !empty($errors)}
+                <div class="alert alert-danger m-3">
+                    <ul class="mb-0">
+                        {foreach $errors as $error}
+                            <li>{$error}</li>
+                        {/foreach}
+                    </ul>
+                </div>
+            {/if}
+
+            <form id="addClientForm" method="POST">
+                <input type="hidden" name="action" value="addClient">
+                <div class="modal-body">
+                    <!-- Contact Principal -->
+                    <div class="contact-section mb-4">
+                        <h6 class="section-title">Contact Principal</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="prenom_client_1">Prénom</label>
+                                    <input type="text" class="form-control" id="prenom_client_1" name="prenom_client_1" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="nom_client_1">Nom</label>
+                                    <input type="text" class="form-control" id="nom_client_1" name="nom_client_1" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="email_client_1">Email</label>
+                            <input type="email" class="form-control" id="email_client_1" name="email_client_1" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="telephone_client_1">Téléphone</label>
+                            <input type="tel" class="form-control" id="telephone_client_1" name="telephone_client_1" required>
+                        </div>
+                    </div>
+
+                    <!-- Séparateur -->
+                    <div class="separator mb-4">
+                        <div class="separator-line"></div>
+                        <div class="separator-text">
+                            <button type="button" class="btn btn-outline-light btn-sm" id="toggleSecondContact">
+                                <i class="fas fa-plus me-2"></i>Ajouter un second contact
+                            </button>
+                        </div>
+                        <div class="separator-line"></div>
+                    </div>
+
+                    <!-- Contact Secondaire -->
+                    <div class="contact-section mb-4" id="secondContactSection" style="display: none;">
+                        <h6 class="section-title">Second Contact</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="prenom_client_2">Prénom</label>
+                                    <input type="text" class="form-control" id="prenom_client_2" name="prenom_client_2">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="nom_client_2">Nom</label>
+                                    <input type="text" class="form-control" id="nom_client_2" name="nom_client_2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="email_client_2">Email</label>
+                            <input type="email" class="form-control" id="email_client_2" name="email_client_2">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="telephone_client_2">Téléphone</label>
+                            <input type="tel" class="form-control" id="telephone_client_2" name="telephone_client_2">
+                        </div>
+                    </div>
+
+                    <!-- Adresse -->
+                    <div class="contact-section mb-4">
+                        <h6 class="section-title">Adresse</h6>
+                        <div class="form-group mb-3">
+                            <label for="rue">Rue</label>
+                            <input type="text" class="form-control" id="rue" name="rue" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="code_postal">Code Postal</label>
+                                    <input type="text" class="form-control" id="code_postal" name="code_postal" required>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group mb-3">
+                                    <label for="ville">Ville</label>
+                                    <input type="text" class="form-control" id="ville" name="ville" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="pays">Pays</label>
+                            <input type="text" class="form-control" id="pays" name="pays" required value="France">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Annuler
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Ajouter
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/if}
+
+<!-- Modals de suppression pour chaque client -->
+{if $canDelete}
+{foreach $clients as $client}
+<div class="modal fade" id="deleteClientModal{$client->getId_client()}" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-trash me-2"></i>Confirmation de suppression</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST">
+                <input type="hidden" name="action" value="deleteClient">
+                <input type="hidden" name="id_client" value="{$client->getId_client()}">
+                <div class="modal-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
+                    </div>
+                    <p>Êtes-vous sûr de vouloir supprimer le client <strong>{$client->getPrenom_client_1()} {$client->getNom_client_1()}</strong> ?</p>
+                    <p class="text-muted small">Cette action est irréversible.</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Annuler
+                    </button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>Supprimer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de détails pour chaque client -->
+<div class="modal fade" id="viewClientModal{$client->getId_client()}" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-user me-2"></i>Détails du client</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="section-title">Contact Principal</h6>
+                        <p><strong>Nom :</strong> {$client->getPrenom_client_1()} {$client->getNom_client_1()}</p>
+                        <p><strong>Email :</strong> {$client->getEmail_client_1()}</p>
+                        <p><strong>Téléphone :</strong> {$client->getTelephone_client_1()}</p>
+                    </div>
+                    {if $client->getNom_client_2()}
+                    <div class="col-md-6">
+                        <h6 class="section-title">Contact Secondaire</h6>
+                        <p><strong>Nom :</strong> {$client->getPrenom_client_2()} {$client->getNom_client_2()}</p>
+                        <p><strong>Email :</strong> {$client->getEmail_client_2()}</p>
+                        <p><strong>Téléphone :</strong> {$client->getTelephone_client_2()}</p>
+                    </div>
+                    {/if}
+                </div>
+                <hr>
+                <h6 class="section-title">Adresse</h6>
+                <p>{$client->getAdresseComplete()}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Fermer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{/foreach}
+{/if}

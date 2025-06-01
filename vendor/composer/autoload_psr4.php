@@ -9,6 +9,9 @@ return array(
     'monApp\\models\\' => array($baseDir . '/models'),
     'monApp\\core\\' => array($baseDir . '/core'),
     'monApp\\controllers\\pages\\' => array($baseDir . '/controllers/pages'),
+    'Tests\\' => array($baseDir . '/tests'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Smarty\\' => array($vendorDir . '/smarty/smarty/src'),
+    'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
+    'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
 );

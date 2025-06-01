@@ -1,0 +1,185 @@
+{* Définition des permissions selon le rôle *}
+{assign var="canEdit" value=false}
+{assign var="canDelete" value=false}
+{assign var="canAdd" value=false}
+
+{* Attribution des permissions selon le rôle *}
+{if isset($user)}
+    {if $user.role == 1} {* Administrateur *}
+        {assign var="canEdit" value=true}
+        {assign var="canDelete" value=true}
+        {assign var="canAdd" value=true}
+    {elseif $user.role == 2} {* Gérant *}
+        {assign var="canEdit" value=true}
+        {assign var="canAdd" value=true}
+    {elseif $user.role == 3} {* Vendeur *}
+        {assign var="canEdit" value=true}
+    {/if}
+{/if}
+
+<!-- Gestion des Véhicules -->
+<div class="vehicles-container">
+    <!-- Grille des véhicules -->
+    <div class="row g-4">
+        {foreach from=$vehicules item=vehicule}
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="vehicle-card">
+                <div class="vehicle-image">
+                    {assign var="images" value=$vehicule->getImages()}
+                    {if $images && is_array($images) && count($images) > 0 && $images[0]->getUrl_image()}
+                        <img src="{$images[0]->getUrl_image()}" alt="{$images[0]->getAlt_image()}">
+                    {else}
+                        <img src="assets/imgs/logo.png" alt="Image par défaut">
+                    {/if}
+                </div>
+                <div class="vehicle-info">
+                    <h3>{$vehicule->getModele()->getMarque()->getNom_marque()} {$vehicule->getModele()->getNom_modele()}{if $vehicule->getGeneration()} {$vehicule->getGeneration()->getNom_generation()}{/if}</h3>
+                    <div class="vehicle-specs">
+                        <span><i class="fas fa-calendar"></i> {$vehicule->getAnnee_vehicule()}</span>
+                        <span><i class="fas fa-tachometer-alt"></i> {$vehicule->getKilometrage_vehicule()|number_format:0:',':" "} km</span>
+                        <span><i class="fas fa-gas-pump"></i> {$vehicule->getCarburant()->getNom_carburant()}</span>
+                        <span class="client-info">
+                            <i class="fas fa-user"></i> Vendu à : 
+                            {if $vehicule->nom_client_1}
+                                {$vehicule->nom_client_1|capitalize} {$vehicule->prenom_client_1|capitalize}
+                                {if $vehicule->nom_client_2}
+                                    et {$vehicule->nom_client_2|capitalize} {$vehicule->prenom_client_2|capitalize}
+                                {/if}
+                            {else}
+                                Client non spécifié
+                            {/if}
+                        </span>
+                    </div>
+                    <div class="vehicle-price">
+                        <span class="price">{$vehicule->getPrix_vehicule()|number_format:0:',':" "} €</span>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button class="btn btn-outline-light btn-sm" onclick="window.location.href='?p=vehicule&id={$vehicule->getId_vehicule()}&action=view'">
+                            <i class="fas fa-eye me-2"></i>Détails
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {foreachelse}
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>Aucun véhicule vendu à afficher.
+            </div>
+        </div>
+        {/foreach}
+    </div>
+</div>
+
+{if $canDelete}
+{foreach from=$vehicules item=vehicule}
+<!-- Modal de suppression pour chaque véhicule -->
+<div class="modal fade" id="deleteVehicleModal{$vehicule->getId_vehicule()}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                    Confirmer la suppression
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer ce véhicule ?</p>
+                <div class="vehicle-info-preview">
+                    <p class="mb-1"><strong>Modèle :</strong> {$vehicule->getModele()->getMarque()->getNom_marque()} {$vehicule->getModele()->getNom_modele()}</p>
+                    <p class="mb-1"><strong>Immatriculation :</strong> {$vehicule->getImmatriculation_vehicule()}</p>
+                    <p class="mb-0"><strong>Client :</strong> 
+                        {if $vehicule->nom_client_1}
+                            {$vehicule->nom_client_1|capitalize} {$vehicule->prenom_client_1|capitalize}
+                        {else}
+                            Non attribué
+                        {/if}
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Annuler
+                </button>
+                <form method="POST" style="display: inline;">
+                    <input type="hidden" name="action" value="deleteVehicle">
+                    <input type="hidden" name="id_vehicule" value="{$vehicule->getId_vehicule()}">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>Supprimer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/foreach}
+{/if}
+
+<!-- Inclusion de noUiSlider -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@14.6.3/distribute/nouislider.min.css">
+<script src="https://cdn.jsdelivr.net/npm/nouislider@14.6.3/distribute/nouislider.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle des filtres
+    const toggleFilters = document.getElementById('toggleFilters');
+    const filtersPanel = document.getElementById('filtersPanel');
+
+    toggleFilters.addEventListener('click', function() {
+        filtersPanel.classList.toggle('show');
+    });
+
+    // Initialisation du slider de prix
+    const priceSlider = document.getElementById('priceSlider');
+    const minPriceInput = document.getElementById('minPrice');
+    const maxPriceInput = document.getElementById('maxPrice');
+
+    noUiSlider.create(priceSlider, {
+        start: [0, 100000],
+        connect: true,
+        step: 1000,
+        range: {
+            'min': 0,
+            'max': 100000
+        },
+        format: {
+            to: function (value) {
+                return Math.round(value);
+            },
+            from: function (value) {
+                return Number(value);
+            }
+        }
+    });
+
+    // Mise à jour des inputs lors du slide
+    priceSlider.noUiSlider.on('update', function (values, handle) {
+        if (handle === 0) {
+            minPriceInput.value = values[0];
+        } else {
+            maxPriceInput.value = values[1];
+        }
+    });
+
+    // Mise à jour du slider lors de la saisie dans les inputs
+    minPriceInput.addEventListener('change', function () {
+        priceSlider.noUiSlider.set([this.value, null]);
+    });
+
+    maxPriceInput.addEventListener('change', function () {
+        priceSlider.noUiSlider.set([null, this.value]);
+    });
+
+    // Réinitialisation des filtres
+    document.getElementById('resetFilters').addEventListener('click', function() {
+        document.querySelectorAll('.filters-body select').forEach(select => {
+            select.value = '';
+        });
+        document.querySelectorAll('.filters-body input').forEach(input => {
+            input.value = '';
+        });
+        priceSlider.noUiSlider.reset();
+    });
+});
+</script>

@@ -1,357 +1,225 @@
-<section class="vehicules-section">
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Colonne des filtres -->
-            <div class="col-lg-4 filters-column">
-                <div class="filters-sidebar">
-                    <div class="filters-header">
-                        <h3>Filtres</h3>
-                        <button class="filters-btn-reset" onclick="resetFilters()">
-                            <i class="fas fa-undo"></i> Réinitialiser
-                        </button>
+<!-- Gestion des Véhicules -->
+<div class="vehicles-container">
+    <!-- Messages d'erreur et de succès -->
+    {if $error_message}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {$error_message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {/if}
+    
+    {if $success_message}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {$success_message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {/if}
+
+    <!-- Grille des véhicules -->
+    <div class="row g-4">
+        <!-- Case d'ajout -->
+        {if $canAddVehicle}
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="vehicle-card add-card" data-bs-toggle="modal" data-bs-target="#addVehicleModal">
+                <div class="vehicle-image add-image">
+                    <div class="add-icon">
+                        <i class="fas fa-plus"></i>
                     </div>
-                
-                    <form id="filters-form" class="filters-content">
-                        <!-- Prix -->
-                        <div class="filters-group">
-                            <h4>Prix</h4>
-                            <div class="price-inputs">
-                                <div class="input-group">
-                                    <input type="number" id="prix-min" name="prix-min" placeholder="Min">
-                                    <span>€</span>
-                                </div>
-                                <div class="separator">-</div>
-                                <div class="input-group">
-                                    <input type="number" id="prix-max" name="prix-max" placeholder="Max">
-                                    <span>€</span>
-                                </div>
-                            </div>
-                        </div>
-                
-                        <!-- Puissance -->
-                        <div class="filters-group">
-                            <h4>Puissance</h4>
-                            <div class="price-inputs">
-                                <div class="input-group">
-                                    <input type="number" id="puissance-min" name="puissance-min" placeholder="Min">
-                                    <span>ch</span>
-                                </div>
-                                <div class="separator">-</div>
-                                <div class="input-group">
-                                    <input type="number" id="puissance-max" name="puissance-max" placeholder="Max">
-                                    <span>ch</span>
-                                </div>
-                            </div>
-                        </div>
-                
-                        <!-- Kilométrage -->
-                        <div class="filters-group">
-                            <h4>Kilométrage</h4>
-                            <div class="range-slider">
-                                <input type="range" id="kilometrage" name="kilometrage" min="0" max="200000" step="5000">
-                                <div class="range-value"><span id="km-value">100000</span> km</div>
-                            </div>
-                        </div>
-                
-                        <!-- Année -->
-                        <div class="filters-group">
-                            <h4>Année</h4>
-                            <select name="annee" id="annee" class="form-select">
-                                <option value="">Toutes les années</option>
-                                {foreach $annees as $annee}
-                                    <option value="{$annee->annee}">{$annee->annee}</option>
-                                {/foreach}
-                            </select>
-                        </div>
-                
-                        <!-- Marque -->
-                        <div class="filters-group">
-                            <h4>Marque</h4>
-                            {foreach $marques as $marque}
-                            <div class="filters-checkbox-list">
-                                <label class="filters-checkbox-item">
-                                    <input type="checkbox" name="marque[]" value="Peugeot">
-                                    <span class="filters-checkmark"></span>
-                                    <div class="filters-brand-info">
-                                            <span class="filters-brand-name">{$marque->getNom_marque()}</span>
-                                    </div>
-                                </label>
-                            </div>
-                            {/foreach}
-                        </div>
-                        
-                        <!-- modèle -->
-                        <div class="filters-group">
-                            <h4>Modèle</h4>
-                            <select name="modele" id="modele" class="form-select">
-                                <option value="">Tous les modèles</option>
-                                {foreach $modeles as $modele}
-                                    {assign var="generations" value=$modele->getGenerations()}
-                                    <option value="{$modele->getId_modele()}">
-                                        {$modele->getNom_modele()}
-                                    </option>
-                                {/foreach}
-                            </select>
-                        </div>
-                
-                        <!-- Carburant -->
-                        <div class="filters-group">
-                            <h4>Carburant</h4>
-                            {foreach $carburants as $carburant}                            
-                            <div class="filters-checkbox-list">
-                                <label class="filters-checkbox-item">
-                                    <input type="checkbox" 
-                                    name="carburant[]" 
-                                    value="{$carburant->getId_carburant()}"
-                                    id="carburant-{$carburant->getId_carburant()}">
-                                    <span class="filters-checkmark"></span>
-                                    <div class="filters-brand-info">
-                                            <span class="filters-brand-name">{$carburant->getNom_carburant()}</span>
-                                    </div>
-                                </label>
-                            </div>
-                            {/foreach}
-                        </div>
-                
-                        <!-- Options -->
-                        <div class="filters-group">
-                            <h4>Options</h4>
-                            {foreach $options as $option}
-                            <div class="filters-checkbox-list">
-                                <label class="filters-checkbox-item">
-                                    <input type="checkbox" 
-                                    name="options[]" 
-                                    value="{$option->getId_option()}"
-                                    id="option-{$option->getId_option()}">
-                                    <span class="filters-checkmark"></span>
-                                    <div class="filters-brand-info">
-                                            <span class="filters-brand-name">{$option->getNom_option()}</span>
-                                    </div>
-                                </label>
-                            </div>
-                            {/foreach}
-                        </div>
-                
-                        <button type="submit" class="btn-apply">
-                            Appliquer les filtres
-                        </button>
-                    </form>
                 </div>
-            </div>  
-
-            <!-- Colonne de la liste des véhicules -->
-            <div class="col-lg-8 vehicles-column">
-                <div class="vehicles-section">
-                    <div class="container">
-                        <!-- Section du formulaire d'ajout -->
-                        <div id="addVehicleFormSection" class="new-client-form-section" style="display: none;">
-                            <div class="form-header">
-                                <h2>Ajouter un véhicule</h2>
-                                <button type="button" class="close-form" onclick="closeAddVehicleForm()">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                            
-                            <form id="addVehicleForm" class="form-grid" enctype="multipart/form-data">
-                                <!-- Première ligne -->
-                                <div class="form-group">
-                                    <label for="marque">Marque</label>
-                                    <select name="marque" id="marque" required>
-                                        <option value="">Sélectionnez une marque</option>
-                                        {foreach $marques as $marque}
-                                            <option value="{$marque->getId_marque()}">{$marque->getNom_marque()}</option>
-                                        {/foreach}
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="modele">Modèle</label>
-                                    <select name="modele" id="modele" required>
-                                        <option value="">Sélectionnez un modèle</option>
-                                        {foreach $marques as $marque}
-                                            <optgroup label="{$marque->getNom_marque()}">
-                                                {foreach $modeles as $modele}
-                                                    {if $modele->getMarque()->getId_marque() == $marque->getId_marque()}
-                                                        <option value="{$modele->getId_modele()}" data-marque="{$marque->getId_marque()}">
-                                                            {$modele->getNom_modele()}
-                                                        </option>
-                                                    {/if}
-                                                {/foreach}
-                                            </optgroup>
-                                        {/foreach}
-                                    </select>
-                                </div>
-
-                                <!-- Deuxième ligne -->
-                                <div class="form-group">
-                                    <label for="generation">Génération</label>
-                                    <select name="generation" id="generation">
-                                        <option value="">Sélectionnez une génération</option>
-                                        {foreach $modeles as $modele}
-                                            {assign var="generations" value=$modele->getGenerations()}
-                                            {if $generations}
-                                                <optgroup label="{$modele->getNom_modele()}">
-                                                    {foreach $generations as $generation}
-                                                        <option value="{$generation->getId_generation()}" 
-                                                                data-modele="{$modele->getId_modele()}">
-                                                            {$generation->getNom_generation()}
-                                                        </option>
-                                                    {/foreach}
-                                                </optgroup>
-                                            {/if}
-                                        {/foreach}
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="annee">Année</label>
-                                    <input type="number" name="annee" id="annee" required>
-                                </div>
-
-                                <!-- Troisième ligne -->
-                                <div class="form-group">
-                                    <label for="prix">Prix</label>
-                                    <input type="number" name="prix" id="prix" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="kilometrage">Kilométrage</label>
-                                    <input type="number" name="kilometrage" id="kilometrage" required>
-                                </div>
-
-                                <!-- Quatrième ligne -->
-                                <div class="form-group">
-                                    <label for="carburant">Carburant</label>
-                                    <select name="carburant" id="carburant" required>
-                                        <option value="">Sélectionnez un carburant</option>
-                                        {foreach $carburants as $carburant}
-                                            <option value="{$carburant->getId_carburant()}">{$carburant->getNom_carburant()}</option>
-                                        {/foreach}
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="boite">Boîte de vitesse</label>
-                                    <select name="boite" id="boite" required>
-                                        <option value="Manuelle">Manuelle</option>
-                                        <option value="Automatique">Automatique</option>
-                                    </select>
-                                </div>
-
-                                <!-- Cinquième ligne -->
-                                <div class="form-group">
-                                    <label for="puissance">Puissance (en ch)</label>
-                                    <input type="number" name="puissance" id="puissance" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="puissance_fiscale">Puissance fiscale</label>
-                                    <input type="number" name="puissance_fiscale" id="puissance_fiscale">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="immatriculation">Immatriculation</label>
-                                    <input type="text" name="immatriculation" id="immatriculation" required>
-                                </div>
-
-                                <!-- Description (pleine largeur) -->
-                                <div class="form-group full-width">
-                                    <label for="description">Description</label>
-                                    <textarea name="description" id="description" rows="4" required></textarea>
-                                </div>
-
-                                <!-- Options (pleine largeur) -->
-                                <div class="form-group full-width">
-                                    <label>Options du véhicule</label>
-                                    <div class="options-grid">
-                                        {foreach $options as $option}
-                                            <div class="option-checkbox">
-                                                <input type="checkbox" 
-                                                       name="options_vehicule[]" 
-                                                       value="{$option->getId_option()}"
-                                                       id="option-vehicule-{$option->getId_option()}">
-                                                <label for="option-vehicule-{$option->getId_option()}">
-                                                    {$option->getNom_option()}
-                                                </label>
-                                            </div>
-                                        {/foreach}
-                                    </div>
-                                </div>
-
-                                <!-- Images (pleine largeur) -->
-                                <div class="form-group full-width">
-                                    <label for="images">Images</label>
-                                    <input type="file" name="images[]" id="images" multiple 
-                                           accept="image/jpeg,image/png,image/webp"
-                                           data-max-size="52428800">
-                                    <small class="form-text">
-                                        Formats acceptés : JPG, PNG, WEBP. Taille maximale : 50MB par image.
-                                    </small>
-                                </div>
-
-                                <!-- Boutons d'action -->
-                                <div class="form-actions full-width">
-                                    <button type="button" class="btn-secondary" onclick="closeAddVehicleForm()">Annuler</button>
-                                    <button type="submit" class="btn-primary">Ajouter le véhicule</button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="vehicles-grid">
-                            {foreach $vehicules as $vehicule}
-                            <div class="vehicle-card">
-                                <div class="vehicle-image">
-                                    {if !empty($vehicule->getImages())}
-                                        {assign var="images" value=$vehicule->getImages()}
-                                        <img src="assets/imgs/vehicules/{$images[0]->getUrl_image()}" alt="{$images[0]->getAlt_image()}">
-                                    {else}
-                                        <img src="assets/imgs/default-vehicle.jpg" alt="Image par défaut">
-                                    {/if}
-                                    <span class="vehicle-price">{$vehicule->getPrix_vehicule()|number_format:2:',':" "} €</span>
-                                    <span class="vehicle-year">{$vehicule->getAnnee_vehicule()}</span>
-                                </div>
-                                <div class="vehicle-content">
-                                    <h3 class="vehicle-title">
-                                        {$vehicule->getMarque()->getNom_marque()} 
-                                        {$vehicule->getModele()->getNom_modele()}
-                                        {if $vehicule->getGeneration()}
-                                            {$vehicule->getGeneration()->getNom_generation()}
-                                        {/if}
-                                    </h3>
-                                    <div class="vehicle-specs">
-                                        <div class="spec-item">
-                                            <i class="fas fa-tachometer-alt"></i>
-                                            <span>{$vehicule->getKilometrage_vehicule()|number_format:0:'':" "} km</span>
-                                        </div>
-                                        <div class="spec-item">
-                                            <i class="fas fa-gas-pump"></i>
-                                            <span>{$vehicule->getCarburant()->getNom_carburant()}</span>
-                                        </div>
-                                        <div class="spec-item">
-                                            <i class="fas fa-cog"></i>
-                                            <span>{$vehicule->getBoite_vitesse_vehicule()}</span>
-                                        </div>
-                                    </div>
-                                    <p class="vehicle-description">
-                                        {$vehicule->getDescription_vehicule()}
-                                    </p>
-                                    <div class="vehicle-actions">
-                                        <a href="?p=vehiculeseul&id={$vehicule->getId_vehicule()}" class="btn-details">Voir détails</a>
-                                    </div>
-                                </div>
-                            </div>
-                            {/foreach}
-
-                            <!-- Bouton Ajouter un véhicule -->
-                            <div class="add-vehicle-card" onclick="openAddVehicleForm()">
-                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 4V20M4 12H20" stroke="#666666" stroke-width="2" stroke-linecap="round"/>
-                                </svg>
-                            </div>
-                        </div>
+                <div class="vehicle-info">
+                    <h3>Ajouter un véhicule</h3>
+                    <div class="vehicle-specs">
+                        <span>Cliquez pour ajouter un nouveau véhicule à l'inventaire</span>
                     </div>
                 </div>
             </div>
         </div>
+        {/if}
+
+        <!-- Liste des véhicules -->
+        {foreach from=$vehicules item=vehicule}
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="vehicle-card">
+                <div class="vehicle-image">
+                    {assign var="images" value=$vehicule->getImages()}
+                    {if $images && is_array($images) && count($images) > 0 && $images[0]->getUrl_image()}
+                        <img src="{$images[0]->getUrl_image()}" alt="{$images[0]->getAlt_image()}">
+                    {else}
+                        <img src="assets/imgs/logo.png" alt="Image par défaut">
+                    {/if}
+                </div>
+                <div class="vehicle-info">
+                    <h3>{$vehicule->getModele()->getMarque()->getNom_marque()} {$vehicule->getModele()->getNom_modele()}{if $vehicule->getGeneration()} {$vehicule->getGeneration()->getNom_generation()}{/if}</h3>
+                    <div class="vehicle-specs">
+                        <span><i class="fas fa-calendar"></i> {$vehicule->getAnnee_vehicule()}</span>
+                        <span><i class="fas fa-tachometer-alt"></i> {$vehicule->getKilometrage_vehicule()|number_format:0:',':" "} km</span>
+                        <span><i class="fas fa-gas-pump"></i> {$vehicule->getCarburant()->getNom_carburant()}</span>
+                    </div>
+                    <div class="vehicle-description mt-3">
+                        <p class="text-light mb-3">{$vehicule->getDescription_vehicule()|truncate:150:"..."}</p>
+                    </div>
+                    <div class="vehicle-price">
+                        <span class="price">{$vehicule->getPrix_vehicule()|number_format:0:',':" "} €</span>
+                    </div>
+                    <div class="vehicle-actions">
+                        <a href="?p=vehicule&id={$vehicule->getId_vehicule()}" class="btn btn-primary">
+                            <i class="fas fa-eye"></i>
+                            Détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {/foreach}
     </div>
-</section>
+</div>
+
+<!-- Modal d'ajout de véhicule -->
+<div class="modal fade" id="addVehicleModal" tabindex="-1" aria-labelledby="addVehicleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addVehicleModalLabel">Ajouter un véhicule</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <form id="addVehicleForm" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type="hidden" name="action" value="addVehicule">
+                    <div class="row g-3">
+                        <!-- Sélection Marque/Modèle/Génération -->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="marque">Marque</label>
+                                <select class="form-select" id="marque" name="marque" required>
+                                    <option value="">Sélectionner une marque</option>
+                                    {foreach from=$marques item=marque}
+                                        <option value="{$marque->getId_marque()}">{$marque->getNom_marque()}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="modele">Modèle</label>
+                                <select class="form-select" id="modele" name="modele" required >
+                                    <option value="">Sélectionner un modèle</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="generation">Génération</label>
+                                <select class="form-select" id="generation" name="generation" >
+                                    <option value="">Sélectionner une génération</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Autres champs existants -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="carburant">Carburant</label>
+                                <select class="form-select" id="carburant" name="carburant" required>
+                                    <option value="">Sélectionner un carburant</option>
+                                    {foreach from=$carburants item=carburant}
+                                        <option value="{$carburant->getId_carburant()}">
+                                            {$carburant->getNom_carburant()}
+                                        </option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="annee">Année</label>
+                                <input type="number" class="form-control" id="annee" name="annee" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="prix">Prix</label>
+                                <input type="number" class="form-control" id="prix" name="prix" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="kilometrage">Kilométrage</label>
+                                <input type="number" class="form-control" id="kilometrage" name="kilometrage" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="boiteVitesse">Boîte de vitesse</label>
+                                <select class="form-select" id="boiteVitesse" name="boiteVitesse" required>
+                                    <option value="">Sélectionner</option>
+                                    <option value="Manuelle">Manuelle</option>
+                                    <option value="Automatique">Automatique</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="puissance">Puissance (ch)</label>
+                                <input type="number" class="form-control" id="puissance" name="puissance" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="puissanceFiscale">Puissance fiscale</label>
+                                <input type="number" class="form-control" id="puissanceFiscale" name="puissanceFiscale">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="immatriculation">Immatriculation</label>
+                                <input type="text" class="form-control" id="immatriculation" name="immatriculation" required>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Images -->
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="images">Images</label>
+                                <input type="file" class="form-control" id="images" name="images[]" multiple accept="image/png,image/jpeg,image/jpg,image/webp">
+                                <small class="form-text text-light">Formats acceptés : PNG, JPG, JPEG, WEBP</small>
+                            </div>
+                        </div>
+
+                        <!-- Options -->
+                        <div class="col-12 mt-4 options-section">
+                            <div class="form-group">
+                                <label class="mb-3">
+                                    <i class="fas fa-list-check me-2"></i>Options du véhicule
+                                </label>
+                                <div class="row g-3">
+                                    {foreach from=$options item=option}
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="options[]" value="{$option->getId_option()}" id="option_{$option->getId_option()}">
+                                            <label class="form-check-label text-light" for="option_{$option->getId_option()}">
+                                                {$option->getNom_option()}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    {/foreach}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Ajouter le véhicule</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

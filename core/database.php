@@ -28,15 +28,42 @@ try{
         echo $erreur->getMessage();
     }
 }
+
+    public function getPDO() {
+        return $this->db;
+    }
+
     public function query($sql,$class){
-        $rst = $this->db->query($sql);
-        return $rst->fetchAll(PDO::FETCH_CLASS,$class);
+        try {
+            $rst = $this->db->query($sql);
+            if ($rst === false) {
+                error_log("Debug query : Erreur dans la requête");
+                error_log("Error info : " . implode(", ", $this->db->errorInfo()));
+                return [];
+            }
+            
+            // Utiliser FETCH_CLASS au lieu de FETCH_ASSOC
+            $results = $rst->fetchAll(PDO::FETCH_CLASS, $class);
+            
+            error_log("Debug query : " . count($results) . " résultats trouvés");
+            return $results;
+        } catch (PDOException $e) {
+            error_log("Debug query : Exception - " . $e->getMessage());
+            return [];
+        }
     }
     
-    public function prepare($sql,$data,$class){
+    public function prepare($sql, $data, $class = null) {
         $rst = $this->db->prepare($sql);
-        $rst->execute($data);
-        return $rst->fetchAll(PDO::FETCH_CLASS,$class);
+        $success = $rst->execute($data);
+        
+        // Si un nom de classe est fourni, on retourne les résultats
+        if ($class !== null) {
+            return $rst->fetchAll(PDO::FETCH_CLASS, $class);
+        }
+        
+        // Sinon on retourne le succès de l'exécution
+        return $success;
     }
 
     public function exec($sql, $data = []) {
@@ -50,6 +77,18 @@ try{
 
     public function lastInsertId() {
         return $this->db->lastInsertId();
+    }
+
+    public function beginTransaction() {
+        return $this->db->beginTransaction();
+    }
+
+    public function commit() {
+        return $this->db->commit();
+    }
+
+    public function rollBack() {
+        return $this->db->rollBack();
     }
 }
 ?>

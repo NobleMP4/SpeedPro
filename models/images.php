@@ -12,6 +12,7 @@ class images extends table {
     protected $alt_image;
     protected $url_image;
     protected $slug_image;
+    protected $date_creation_image;
 
     // Getters et Setters
     public function getId_image() { return $this->id_image; }
@@ -28,6 +29,9 @@ class images extends table {
 
     public function getSlug_image() { return $this->slug_image; }
     public function setSlug_image($value) { $this->slug_image = $value; return $this; }
+
+    public function getDate_creation_image() { return $this->date_creation_image; }
+    public function setDate_creation_image($value) { $this->date_creation_image = $value; return $this; }
 
     // Relations
     public function getVehicules() {

@@ -1,0 +1,284 @@
+<div class="vehicle-details-container">
+    <div class="vehicle-header">
+        <div class="header-content">
+            <div class="title-wrapper">
+                <h1>{$vehicule->getModele()->getMarque()->getNom_marque()} {$vehicule->getModele()->getNom_modele()}</h1>
+                {if $vehicule->getGeneration()}
+                    <span class="generation-badge">
+                        <i class="fas fa-code-branch"></i>
+                        {$vehicule->getGeneration()->getNom_generation()}
+                    </span>
+                {/if}
+            </div>
+        </div>
+        <div class="vehicle-status">
+            <span class="status-badge {if $vehicule->getStatut_vehicule() == 'Disponible'}available{else}sold{/if}">
+                {$vehicule->getStatut_vehicule()}
+                {if $vehicule->getStatut_vehicule() != 'Disponible' && $vehicule->getNom_client()}
+                    <span class="client-info">
+                        <i class="fas fa-user"></i>
+                        {$vehicule->getPrenom_client()} {$vehicule->getNom_client()}
+                    </span>
+                {/if}
+            </span>
+        </div>
+    </div>
+
+    <div class="vehicle-content">
+        <div class="content-left">
+            <div class="vehicle-gallery">
+                {assign var="images" value=$vehicule->getImages()}
+                <div class="main-image">
+                    {if $images && count($images) > 0}
+                        <img src="{$images[0]->getUrl_image()}" alt="{$images[0]->getAlt_image()}" id="mainImage">
+                    {else}
+                        <img src="assets/imgs/logo.png" alt="Image par défaut">
+                    {/if}
+                </div>
+                {if $images && count($images) > 1}
+                    <div class="thumbnails">
+                        {foreach from=$images item=image}
+                            <div class="thumbnail" onclick="changeMainImage('{$image->getUrl_image()}', '{$image->getAlt_image()}')">
+                                <img src="{$image->getUrl_image()}" alt="{$image->getAlt_image()}">
+                            </div>
+                        {/foreach}
+                    </div>
+                {/if}
+            </div>
+
+            <div class="info-section description-section">
+                <h2>Description</h2>
+                <div class="description">
+                    {$vehicule->getDescription_vehicule()}
+                </div>
+            </div>
+
+            {if $vehicule_options && count($vehicule_options) > 0}
+                <div class="info-section options-section">
+                    <h2>Options</h2>
+                    <div class="options-grid">
+                        {foreach from=$vehicule_options item=option}
+                            <div class="option-item">
+                                <i class="fas fa-check"></i>
+                                <span>{$option->getNom_option()}</span>
+                            </div>
+                        {/foreach}
+                    </div>
+                </div>
+            {/if}
+        </div>
+
+        <div class="content-right">
+            <div class="info-section price-section">
+                <h2>Prix</h2>
+                <div class="price">{$vehicule->getPrix_vehicule()|number_format:0:'':' '} €</div>
+            </div>
+
+            <div class="info-section specs-section">
+                <h2>Caractéristiques</h2>
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <i class="fas fa-calendar"></i>
+                        <span class="spec-label">Année</span>
+                        <span class="spec-value">{$vehicule->getAnnee_vehicule()}</span>
+                    </div>
+                    <div class="spec-item">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span class="spec-label">Kilométrage</span>
+                        <span class="spec-value">{$vehicule->getKilometrage_vehicule()|number_format:0:',':" "} km</span>
+                    </div>
+                    <div class="spec-item">
+                        <i class="fas fa-gas-pump"></i>
+                        <span class="spec-label">Carburant</span>
+                        <span class="spec-value">{$vehicule->getCarburant()->getNom_carburant()}</span>
+                    </div>
+                    <div class="spec-item">
+                        <i class="fas fa-horse"></i>
+                        <span class="spec-label">Puissance</span>
+                        <span class="spec-value">{$vehicule->getPuissance_vehicule()} ch</span>
+                    </div>
+                    {if $vehicule->getPuissance_fiscale()}
+                    <div class="spec-item">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <span class="spec-label">Puissance fiscale</span>
+                        <span class="spec-value">{$vehicule->getPuissance_fiscale()} CV</span>
+                    </div>
+                    {/if}
+                    <div class="spec-item">
+                        <i class="fas fa-cogs"></i>
+                        <span class="spec-label">Boîte de vitesse</span>
+                        <span class="spec-value">{$vehicule->getBoite_vitesse_vehicule()}</span>
+                    </div>
+                    <div class="spec-item">
+                        <i class="fas fa-id-card"></i>
+                        <span class="spec-label">Immatriculation</span>
+                        <span class="spec-value">{$vehicule->getImmatriculation_vehicule()}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions-section">
+                {if $vehicule->getStatut_vehicule() == 'Disponible' && $canEdit}
+                    <button class="btn btn-primary btn-contact" data-bs-toggle="modal" data-bs-target="#sellVehicleModal">
+                        <i class="fas fa-handshake"></i> Vendre
+                    </button>
+                {/if}
+                {if $canEdit}
+                    <button class="btn btn-outline-light btn-share" data-bs-toggle="modal" data-bs-target="#editVehicleModal">
+                        <i class="fas fa-edit"></i> Modifier
+                    </button>
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de vente -->
+<div class="modal fade" id="sellVehicleModal" tabindex="-1" aria-labelledby="sellVehicleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sellVehicleModalLabel">Vendre le véhicule</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="search-client-section">
+                    <div class="form-group">
+                        <label for="clientSearch">Rechercher un client</label>
+                        <div class="search-box">
+                            <input type="text" class="form-control" id="clientSearch" placeholder="Nom, prénom, email...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    <div class="clients-results" id="clientsResults">
+                        <!-- Les résultats de recherche seront injectés ici -->
+                    </div>
+                </div>
+                <div class="selected-client-info" id="selectedClientInfo" style="display: none;">
+                    <h6>Client sélectionné</h6>
+                    <div class="client-card">
+                        <div class="client-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="client-details">
+                            <span class="client-name"></span>
+                            <span class="client-email"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary" id="confirmSaleBtn" disabled>
+                    <i class="fas fa-check"></i> Confirmer la vente
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de modification -->
+<div class="modal fade" id="editVehicleModal" tabindex="-1" aria-labelledby="editVehicleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editVehicleModalLabel">Modifier le véhicule</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editVehicleForm">
+                    <div class="form-group mb-3">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="4">{$vehicule->getDescription_vehicule()}</textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="immatriculation">Immatriculation</label>
+                                <input type="text" class="form-control" id="immatriculation" name="immatriculation" value="{$vehicule->getImmatriculation_vehicule()}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="kilometrage">Kilométrage</label>
+                                <input type="number" class="form-control" id="kilometrage" name="kilometrage" value="{$vehicule->getKilometrage_vehicule()}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="puissance">Puissance (ch)</label>
+                                <input type="number" class="form-control" id="puissance" name="puissance" value="{$vehicule->getPuissance_vehicule()}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="puissance_fiscale">Puissance fiscale (CV)</label>
+                                <input type="number" class="form-control" id="puissance_fiscale" name="puissance_fiscale" value="{$vehicule->getPuissance_fiscale()}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label>Options</label>
+                        <div class="options-grid">
+                            {foreach from=$all_options item=option}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="{$option->getId_option()}" 
+                                           id="option_{$option->getId_option()}" name="options[]" 
+                                           {if in_array($option->getId_option(), $vehicule_options_ids)}checked{/if}>
+                                    <label class="form-check-label" for="option_{$option->getId_option()}">
+                                        {$option->getNom_option()}
+                                    </label>
+                                </div>
+                            {/foreach}
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary" id="saveVehicleBtn">
+                    <i class="fas fa-save"></i> Enregistrer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestion de la modification du véhicule
+    document.getElementById('saveVehicleBtn').addEventListener('click', function() {
+        const form = document.getElementById('editVehicleForm');
+        const formData = new FormData(form);
+        formData.append('id_vehicule', '{$vehicule->getId_vehicule()}');
+
+        // Récupération des options cochées
+        const selectedOptions = [];
+        document.querySelectorAll('input[name="options[]"]:checked').forEach(checkbox => {
+            selectedOptions.push(checkbox.value);
+        });
+        formData.append('options', JSON.stringify(selectedOptions));
+
+        // Envoi de la requête AJAX
+        fetch('?p=vehicule&api=updateVehicle', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editVehicleModal'));
+            modal.hide();
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            window.location.reload();
+        });
+    });
+});
+</script>

@@ -11,7 +11,7 @@ class pageLogoutController {
         session_destroy();
         
         // Rediriger vers la page de login
-        app::redirection("?p=login");
+        app::redirection("index.php");
         exit();
     }
 }

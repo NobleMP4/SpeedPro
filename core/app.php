@@ -16,7 +16,14 @@ class app{
     public static $dispatcher;
 
     public static function db(){
-        self::$db = new database("localhost","u848917271_php","root","root");
+        try {
+            self::$db = new database("localhost","sp","root","root");
+            // Debug - Vérification de la connexion
+            echo "<!-- Debug connexion BDD : OK -->";
+        } catch (Exception $e) {
+            echo "<!-- Debug connexion BDD : Erreur -->";
+            echo "<!-- " . $e->getMessage() . " -->";
+        }
     }
 
     public static function section($section){
@@ -31,26 +38,24 @@ class app{
         self::$rooter->addRoute("","monApp\\controllers\\pages\\pageLoginController@index");
         self::$rooter->addRoute("accueil","monApp\\controllers\\pages\\pageHomeController@index");
         self::$rooter->addRoute("vehicules","monApp\\controllers\\pages\\pageVehiculesController@index");
+        self::$rooter->addRoute("configuration","monApp\\controllers\\pages\\pageConfigController@index");
+        self::$rooter->addRoute("options","monApp\\controllers\\pages\\pageOptionsController@index");
+        self::$rooter->addRoute("carburants","monApp\\controllers\\pages\\pageCarburantsController@index");
         self::$rooter->addRoute("clients","monApp\\controllers\\pages\\pageClientsController@index");
-        self::$rooter->addRoute("client","monApp\\controllers\\pages\\pageClientController@index");
-        self::$rooter->addRoute("login","monApp\\controllers\\pages\\pageLoginController@index");
-        self::$rooter->addRoute("vehiculeseul","monApp\\controllers\\pages\\pageVehiculeseulController@index");
         self::$rooter->addRoute("vente","monApp\\controllers\\pages\\pageVenteController@index");
-        self::$rooter->addRoute("profil","monApp\\controllers\\pages\\pageProfilController@index");
-        self::$rooter->addRoute("gestion","monApp\\controllers\\pages\\pageGestionController@index");
-        self::$rooter->addRoute("logout","monApp\\controllers\\pages\\pageLogoutController@index");
         self::$rooter->addRoute("utilisateurs","monApp\\controllers\\pages\\pageUtilisateursController@index");
+        self::$rooter->addRoute("profil","monApp\\controllers\\pages\\pageProfilController@index");
+        self::$rooter->addRoute("client","monApp\\controllers\\pages\\pageClientController@index");
+        self::$rooter->addRoute("vehicule","monApp\\controllers\\pages\\pageVehiculeController@index");
+        self::$rooter->addRoute("logout","monApp\\controllers\\pages\\pageLogoutController@index");
         $p = tools::get("p");
-        if(is_null(session::recup("user"))){
-            $p="login";
-        }
-        $route =  self::$rooter->getRoute($p);
+        
+        $route = self::$rooter->getRoute($p);
         self::$dispatcher = new dispatcher();
         ob_start();
             self::$dispatcher->dispatch($route);
             self::$html = ob_get_contents();
         ob_end_clean();
-         
     }
 
     public static function getHtml(){

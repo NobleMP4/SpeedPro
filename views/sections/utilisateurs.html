@@ -1,0 +1,315 @@
+<!-- Gestion des utilisateurs -->
+<div class="clients-container">
+    <!-- Messages de notification -->
+    {if isset($success)}
+        <div class="alert alert-success alert-dismissible fade show animate__animated animate__fadeIn" role="alert">
+            {if $success == 'add'}
+                <i class="fas fa-check-circle me-2"></i>L'utilisateur a été ajouté avec succès.
+            {elseif $success == 'edit'}
+                <i class="fas fa-check-circle me-2"></i>L'utilisateur a été modifié avec succès.
+            {elseif $success == 'delete'}
+                <i class="fas fa-check-circle me-2"></i>L'utilisateur a été supprimé avec succès.
+            {/if}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {/if}
+
+    {if isset($error)}
+        <div class="alert alert-danger alert-dismissible fade show animate__animated animate__fadeIn" role="alert">
+            {if $error == 'delete'}
+                <i class="fas fa-exclamation-circle me-2"></i>Une erreur est survenue lors de la suppression de l'utilisateur.
+            {elseif $error == 'permission'}
+                <i class="fas fa-exclamation-circle me-2"></i>Vous n'avez pas les permissions nécessaires pour effectuer cette action.
+            {elseif $error == 'role'}
+                <i class="fas fa-exclamation-circle me-2"></i>Vous ne pouvez pas attribuer ou gérer ce rôle.
+            {/if}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {/if}
+
+    <!-- Contenu principal -->
+    <div class="row">
+        <div class="col-12">
+            <div class="clients-card">
+                <div class="clients-header">
+                    <div class="header-left">
+                        <h2><i class="fas fa-users me-2"></i>Liste des utilisateurs</h2>
+                        <div class="clients-count">
+                            <span class="badge bg-primary">{count($users)} utilisateurs</span>
+                        </div>
+                    </div>
+                    <div class="header-right">
+                        {if $canAdd}
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                            <i class="fas fa-plus me-2"></i>Ajouter un utilisateur
+                        </button>
+                        {/if}
+                    </div>
+                </div>
+
+                <div class="clients-tools">
+                    <div class="search-box">
+                        <input type="text" class="form-control" id="searchUser" placeholder="Rechercher un utilisateur...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+
+                <div class="clients-list">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Utilisateur</th>
+                                    <th>Login</th>
+                                    <th>Email</th>
+                                    <th>Rôle</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {foreach $users as $user}
+                                <tr>
+                                    <td>
+                                        <div class="client-info">
+                                            <div class="client-avatar">
+                                                <span class="avatar-placeholder">
+                                                    {$user->getPrenomUser()|truncate:1:""}{$user->getNomUser()|truncate:1:""}
+                                                </span>
+                                            </div>
+                                            <div class="client-details">
+                                                <span class="client-name">
+                                                    {$user->getPrenomUser()|capitalize} {$user->getNomUser()|upper}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-white">{$user->getLoginUser()}</td>
+                                    <td class="text-white">{$user->getEmailUser()}</td>
+                                    <td>
+                                        <span class="badge bg-info">
+                                            {$user->getNomRole()}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="client-actions">
+                                            {if ($canEdit || ($canEditVendeur && $user->getIdRoleUser() == 3))}
+                                            <button class="btn btn-icon text-primary" title="Modifier" data-bs-toggle="modal" data-bs-target="#editUserModal{$user->getIdUser()}">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            {/if}
+                                            {if $canDelete && ($userRole == 1 || ($userRole == 2 && $user->getIdRoleUser() != 1 && $user->getIdRoleUser() != 2))}
+                                            <button class="btn btn-icon text-danger" title="Supprimer" data-bs-toggle="modal" data-bs-target="#deleteUserModal{$user->getIdUser()}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                            {/if}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {foreachelse}
+                                <tr>
+                                    <td colspan="5" class="text-center py-4">
+                                        <i class="fas fa-info-circle me-2"></i>Aucun utilisateur trouvé
+                                    </td>
+                                </tr>
+                                {/foreach}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Ajout Utilisateur -->
+{if $canAdd}
+<div class="modal fade" id="addUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-user-plus me-2"></i>Ajouter un utilisateur</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="addUserForm" method="POST">
+                <input type="hidden" name="action" value="addUser">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="prenom_user">Prénom</label>
+                                <input type="text" class="form-control" id="prenom_user" name="prenom_user" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="nom_user">Nom</label>
+                                <input type="text" class="form-control" id="nom_user" name="nom_user" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="email_user">Email</label>
+                        <input type="email" class="form-control" id="email_user" name="email_user" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="mdp_user">Mot de passe</label>
+                        <input type="password" class="form-control" id="mdp_user" name="mdp_user" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="id_role_user">Rôle</label>
+                        <select class="form-select" id="id_role_user" name="id_role_user" required>
+                            <option value="">Sélectionnez un rôle</option>
+                            {foreach from=$roles item=role}
+                                <option value="{$role->getIdRole()}">{$role->getNomRole()}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Annuler
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Ajouter
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/if}
+
+<!-- Modal de modification pour chaque utilisateur -->
+{foreach $users as $user}
+{if $canEdit || ($canEditVendeur && $user->getIdRoleUser() == 3)}
+<div class="modal fade" id="editUserModal{$user->getIdUser()}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-user-edit me-2"></i>Modifier l'utilisateur {$user->getPrenomUser()} {$user->getNomUser()}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST">
+                <input type="hidden" name="action" value="editUser">
+                <input type="hidden" name="id_user" value="{$user->getIdUser()}">
+                <div class="modal-body">
+                    <div class="form-group mb-3">
+                        <label for="email_user_{$user->getIdUser()}">Email</label>
+                        <input type="email" class="form-control" id="email_user_{$user->getIdUser()}" name="email_user" value="{$user->getEmailUser()}" required>
+                    </div>
+                    {if $canEditPassword}
+                    <div class="form-group mb-3">
+                        <label for="mdp_user_{$user->getIdUser()}">Nouveau mot de passe (laisser vide pour ne pas modifier)</label>
+                        <input type="password" class="form-control" id="mdp_user_{$user->getIdUser()}" name="mdp_user">
+                    </div>
+                    {/if}
+                    <div class="form-group mb-3">
+                        <label for="id_role_user_{$user->getIdUser()}">Rôle</label>
+                        <select class="form-select" id="id_role_user_{$user->getIdUser()}" name="id_role_user" required {if $userRole == 2}disabled{/if}>
+                            {foreach $roles as $role}
+                                <option value="{$role->getIdRole()}" {if $user->getIdRoleUser() == $role->getIdRole()}selected{/if}>
+                                    {$role->getNomRole()}
+                                </option>
+                            {/foreach}
+                        </select>
+                        {if $userRole == 2}
+                        <input type="hidden" name="id_role_user" value="3">
+                        {/if}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Annuler
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/if}
+{/foreach}
+
+<!-- Modal de suppression -->
+{if $canDelete}
+{foreach $users as $user}
+{if $userRole == 1 || ($userRole == 2 && $user->getIdRoleUser() != 1 && $user->getIdRoleUser() != 2)}
+<div class="modal fade" id="deleteUserModal{$user->getIdUser()}" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-trash me-2"></i>Confirmation de suppression</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST">
+                <input type="hidden" name="action" value="deleteUser">
+                <input type="hidden" name="id_user" value="{$user->getIdUser()}">
+                <div class="modal-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
+                    </div>
+                    <p>Êtes-vous sûr de vouloir supprimer l'utilisateur <strong>{$user->getPrenomUser()} {$user->getNomUser()}</strong> ?</p>
+                    <p class="text-muted small">Cette action est irréversible.</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Annuler
+                    </button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>Supprimer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/if}
+{/foreach}
+{/if}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestion de la recherche
+    const searchInput = document.getElementById('searchUser');
+    if (searchInput) {
+        searchInput.addEventListener('keyup', function() {
+            const searchText = this.value.toLowerCase();
+            const rows = document.querySelectorAll('.clients-list tbody tr');
+            
+            rows.forEach(row => {
+                const userName = row.querySelector('.client-name')?.textContent.toLowerCase();
+                const userLogin = row.querySelector('td:nth-child(2)')?.textContent.toLowerCase();
+                const userEmail = row.querySelector('td:nth-child(3)')?.textContent.toLowerCase();
+                const userRole = row.querySelector('td:nth-child(4)')?.textContent.toLowerCase();
+                
+                if (userName && userLogin && userEmail && userRole) {
+                    if (userName.includes(searchText) || 
+                        userLogin.includes(searchText) || 
+                        userEmail.includes(searchText) || 
+                        userRole.includes(searchText)) {
+                        row.style.display = '';
+                        row.classList.add('animate__animated', 'animate__fadeIn');
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            });
+        });
+    }
+
+    // Animation des boutons d'action
+    document.querySelectorAll('.btn-icon').forEach(btn => {
+        btn.addEventListener('mouseenter', function() {
+            this.classList.add('animate__animated', 'animate__pulse');
+        });
+        
+        btn.addEventListener('animationend', function() {
+            this.classList.remove('animate__animated', 'animate__pulse');
+        });
+    });
+});
+</script>

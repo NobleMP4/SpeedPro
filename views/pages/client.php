@@ -1,9 +1,9 @@
-<?php
+<?php 
 
 use monApp\core\app;
 
-app::section('header');
-app::section('infosclient');
-app::section('footer');
+app::section("header");
+app::section("client");
+app::section("footer");
 
 ?>

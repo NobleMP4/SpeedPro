@@ -17,6 +17,10 @@ class modeles extends table {
         return $this->id_modele;
     }
     
+    public function setId_modele($id_modele) {
+        $this->id_modele = $id_modele;
+    }
+    
     public function getNom_modele() {
         return $this->nom_modele;
     }
@@ -85,6 +89,13 @@ class modeles extends table {
     // Relations
     public function getMarque() {
         return marques::byId($this->id_marque);
+    }
+
+    public function setMarque($marque) {
+        if ($marque instanceof marques) {
+            $this->id_marque = $marque->getId_marque();
+            $this->nom_marque = $marque->getNom_marque();
+        }
     }
 
     public function getVehicules() {

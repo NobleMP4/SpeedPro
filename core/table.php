@@ -67,14 +67,7 @@ class table{
 
     public static function find($id) {
         $class = get_called_class();
-        $table = strtolower(str_replace('monApp\\models\\', '', $class));
-        $key = static::$key;
-        
-        $sql = "SELECT * FROM {$table} WHERE {$key} = ?";
-        $instance = new $class();
-        $result = $instance->query($sql, [$id]);
-        
-        return !empty($result) ? $result[0] : null;
+        return static::byId($id);
     }
 
     public function ajout() {
@@ -134,6 +127,17 @@ class table{
             app::$db->prepare($sql, $data, get_class($this));
             return app::$db->lastInsertId();
         }
+    }
+
+    public function delete() {
+        if (!isset($this->{static::$key})) {
+            return false;
+        }
+        
+        $sql = "DELETE FROM " . static::getTable() . " WHERE " . static::$key . " = :" . static::$key;
+        $data = [static::$key => $this->{static::$key}];
+        
+        return app::$db->prepare($sql, $data, get_class($this));
     }
 }
 

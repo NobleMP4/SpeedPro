@@ -15,6 +15,11 @@ class carburant extends table {
         return $this->id_carburant;
     }
     
+    public function setId_carburant($id_carburant) {
+        $this->id_carburant = $id_carburant;
+        return $this;
+    }
+    
     public function getNom_carburant() {
         return $this->nom_carburant;
     }
