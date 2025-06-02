@@ -1,4 +1,28 @@
-<!-- Ajout de la bibliothèque Animate.css -->
+<?php
+/* Smarty version 5.5.1, created on 2025-06-02 12:32:40
+  from 'file:views/sections/config.html' */
+
+/* @var \Smarty\Template $_smarty_tpl */
+if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
+  'version' => '5.5.1',
+  'unifunc' => 'content_683d99e82bf572_10567213',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    '5e0dbbddd24a2dbae25a0e7eec1d2c23f12dca7c' => 
+    array (
+      0 => 'views/sections/config.html',
+      1 => 1748867556,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+))) {
+function content_683d99e82bf572_10567213 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = '/Applications/MAMP/htdocs/ProjetCours/SpeedPro/views/sections';
+?><!-- Ajout de la bibliothèque Animate.css -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
 <!-- Configuration des véhicules -->
@@ -11,11 +35,11 @@
             <div class="config-card">
                 <div class="config-header">
                     <h2><i class="fas fa-trademark me-2"></i>Marques</h2>
-                    {if $canAdd}
+                    <?php if ($_smarty_tpl->getValue('canAdd')) {?>
                     <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addMarqueModal">
                         <i class="fas fa-plus me-2"></i>Ajouter
                     </button>
-                    {/if}
+                    <?php }?>
                 </div>
                 <div class="config-body">
                     <div class="search-box mb-3">
@@ -23,28 +47,39 @@
                         <i class="fas fa-search"></i>
                     </div>
                     <div class="config-list" id="marquesList">
-                        {if isset($marques) && !empty($marques)}
-                            {foreach from=$marques item=marque}
-                                <div class="config-item" data-marque-id="{$marque->id_marque}">
+                        <?php if ((true && ($_smarty_tpl->hasVariable('marques') && null !== ($_smarty_tpl->getValue('marques') ?? null))) && !( !$_smarty_tpl->hasVariable('marques') || empty($_smarty_tpl->getValue('marques')))) {?>
+                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('marques'), 'marque');
+$foreach0DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('marque')->value) {
+$foreach0DoElse = false;
+?>
+                                <div class="config-item" data-marque-id="<?php echo $_smarty_tpl->getValue('marque')->id_marque;?>
+">
                                     <div class="item-content">
                                         <div class="item-info">
-                                            <span class="item-name">{$marque->nom_marque}</span>
+                                            <span class="item-name"><?php echo $_smarty_tpl->getValue('marque')->nom_marque;?>
+</span>
                                         </div>
                                         <div class="item-actions">
-                                            {if $canDelete}
-                                            <button class="btn btn-icon text-danger delete-marque" title="Supprimer" data-id="{$marque->id_marque}" data-nom="{$marque->nom_marque}" data-bs-toggle="modal" data-bs-target="#deleteMarqueModal">
+                                            <?php if ($_smarty_tpl->getValue('canDelete')) {?>
+                                            <button class="btn btn-icon text-danger delete-marque" title="Supprimer" data-id="<?php echo $_smarty_tpl->getValue('marque')->id_marque;?>
+" data-nom="<?php echo $_smarty_tpl->getValue('marque')->nom_marque;?>
+" data-bs-toggle="modal" data-bs-target="#deleteMarqueModal">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                            {/if}
+                                            <?php }?>
                                         </div>
                                     </div>
                                 </div>
-                            {/foreach}
-                        {else}
+                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                        <?php } else { ?>
                             <div class="text-center text-muted py-3">
                                 <i class="fas fa-info-circle me-2"></i>Aucune marque trouvée
                             </div>
-                        {/if}
+                        <?php }?>
                     </div>
                 </div>
             </div>
@@ -55,11 +90,11 @@
             <div class="config-card">
                 <div class="config-header">
                     <h2><i class="fas fa-car-side me-2"></i>Modèles</h2>
-                    {if $canAdd}
+                    <?php if ($_smarty_tpl->getValue('canAdd')) {?>
                     <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addModeleModal">
                         <i class="fas fa-plus me-2"></i>Ajouter
                     </button>
-                    {/if}
+                    <?php }?>
                 </div>
                 <div class="config-body">
                     <div class="search-box mb-3">
@@ -67,41 +102,59 @@
                         <i class="fas fa-search"></i>
                     </div>
                     <div class="config-list">
-                        {if isset($modelesParMarque) && !empty($modelesParMarque)}
-                            {foreach from=$marques item=marque}
-                                {if isset($modelesParMarque[$marque->id_marque]) && !empty($modelesParMarque[$marque->id_marque])}
+                        <?php if ((true && ($_smarty_tpl->hasVariable('modelesParMarque') && null !== ($_smarty_tpl->getValue('modelesParMarque') ?? null))) && !( !$_smarty_tpl->hasVariable('modelesParMarque') || empty($_smarty_tpl->getValue('modelesParMarque')))) {?>
+                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('marques'), 'marque');
+$foreach1DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('marque')->value) {
+$foreach1DoElse = false;
+?>
+                                <?php if ((true && (true && null !== ($_smarty_tpl->getValue('modelesParMarque')[$_smarty_tpl->getValue('marque')->id_marque] ?? null))) && !( !true || empty($_smarty_tpl->getValue('modelesParMarque')[$_smarty_tpl->getValue('marque')->id_marque]))) {?>
                                     <div class="marque-group mb-3">
                                         <h6 class="marque-title mb-2">
-                                            <i class="fas fa-car-side me-2"></i>{$marque->nom_marque}
+                                            <i class="fas fa-car-side me-2"></i><?php echo $_smarty_tpl->getValue('marque')->nom_marque;?>
+
                                         </h6>
-                                        {foreach from=$modelesParMarque[$marque->id_marque] item=modele}
+                                        <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('modelesParMarque')[$_smarty_tpl->getValue('marque')->id_marque], 'modele');
+$foreach2DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('modele')->value) {
+$foreach2DoElse = false;
+?>
                                             <div class="config-item">
                                                 <div class="item-content">
                                                     <div class="item-info">
-                                                        <span class="item-name">{$modele->nom_modele}</span>
+                                                        <span class="item-name"><?php echo $_smarty_tpl->getValue('modele')->nom_modele;?>
+</span>
                                                     </div>
                                                     <div class="item-actions">
-                                                        {if $canDelete}
+                                                        <?php if ($_smarty_tpl->getValue('canDelete')) {?>
                                                         <button class="btn btn-icon text-danger" title="Supprimer" 
                                                                 data-bs-toggle="modal" 
                                                                 data-bs-target="#deleteModeleModal" 
-                                                                data-modele-id="{$modele->id_modele}"
-                                                                data-modele-nom="{$modele->nom_modele}">
+                                                                data-modele-id="<?php echo $_smarty_tpl->getValue('modele')->id_modele;?>
+"
+                                                                data-modele-nom="<?php echo $_smarty_tpl->getValue('modele')->nom_modele;?>
+">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
-                                                        {/if}
+                                                        <?php }?>
                                                     </div>
                                                 </div>
                                             </div>
-                                        {/foreach}
+                                        <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                     </div>
-                                {/if}
-                            {/foreach}
-                        {else}
+                                <?php }?>
+                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                        <?php } else { ?>
                             <div class="text-center text-muted py-3">
                                 <i class="fas fa-info-circle me-2"></i>Aucun modèle trouvé
                             </div>
-                        {/if}
+                        <?php }?>
                     </div>
                 </div>
             </div>
@@ -112,11 +165,11 @@
             <div class="config-card">
                 <div class="config-header">
                     <h2><i class="fas fa-code-branch me-2"></i>Générations</h2>
-                    {if $canAdd}
+                    <?php if ($_smarty_tpl->getValue('canAdd')) {?>
                     <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addGenerationModal" disabled>
                         <i class="fas fa-plus me-2"></i>Ajouter
                     </button>
-                    {/if}
+                    <?php }?>
                 </div>
                 <div class="config-body">
                     <div class="search-box mb-3">
@@ -124,45 +177,71 @@
                         <i class="fas fa-search"></i>
                     </div>
                     <div class="config-list">
-                        {if isset($generationsParModele) && !empty($generationsParModele)}
-                            {foreach from=$marques item=marque}
-                                {if isset($modelesParMarque[$marque->id_marque])}
-                                    {foreach from=$modelesParMarque[$marque->id_marque] item=modele}
-                                        {if isset($generationsParModele[$modele->id_modele]) && !empty($generationsParModele[$modele->id_modele])}
+                        <?php if ((true && ($_smarty_tpl->hasVariable('generationsParModele') && null !== ($_smarty_tpl->getValue('generationsParModele') ?? null))) && !( !$_smarty_tpl->hasVariable('generationsParModele') || empty($_smarty_tpl->getValue('generationsParModele')))) {?>
+                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('marques'), 'marque');
+$foreach3DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('marque')->value) {
+$foreach3DoElse = false;
+?>
+                                <?php if ((true && (true && null !== ($_smarty_tpl->getValue('modelesParMarque')[$_smarty_tpl->getValue('marque')->id_marque] ?? null)))) {?>
+                                    <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('modelesParMarque')[$_smarty_tpl->getValue('marque')->id_marque], 'modele');
+$foreach4DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('modele')->value) {
+$foreach4DoElse = false;
+?>
+                                        <?php if ((true && (true && null !== ($_smarty_tpl->getValue('generationsParModele')[$_smarty_tpl->getValue('modele')->id_modele] ?? null))) && !( !true || empty($_smarty_tpl->getValue('generationsParModele')[$_smarty_tpl->getValue('modele')->id_modele]))) {?>
                                             <div class="generation-group mb-3">
                                                 <h6 class="modele-title mb-2">
-                                                    <i class="fas fa-car-side me-2"></i>{$marque->nom_marque} - {$modele->nom_modele}
+                                                    <i class="fas fa-car-side me-2"></i><?php echo $_smarty_tpl->getValue('marque')->nom_marque;?>
+ - <?php echo $_smarty_tpl->getValue('modele')->nom_modele;?>
+
                                                 </h6>
-                                                {foreach from=$generationsParModele[$modele->id_modele] item=generation}
+                                                <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('generationsParModele')[$_smarty_tpl->getValue('modele')->id_modele], 'generation');
+$foreach5DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('generation')->value) {
+$foreach5DoElse = false;
+?>
                                                     <div class="config-item">
                                                         <div class="item-content">
                                                             <div class="item-info">
-                                                                <span class="item-name">{$generation->nom_generation}</span>
+                                                                <span class="item-name"><?php echo $_smarty_tpl->getValue('generation')->nom_generation;?>
+</span>
                                                             </div>
                                                             <div class="item-actions">
-                                                                {if $canDelete}
+                                                                <?php if ($_smarty_tpl->getValue('canDelete')) {?>
                                                                 <button class="btn btn-icon text-danger" title="Supprimer"
                                                                         data-bs-toggle="modal"
                                                                         data-bs-target="#deleteGenerationModal"
-                                                                        data-generation-id="{$generation->id_generation}"
-                                                                        data-generation-nom="{$generation->nom_generation}">
+                                                                        data-generation-id="<?php echo $_smarty_tpl->getValue('generation')->id_generation;?>
+"
+                                                                        data-generation-nom="<?php echo $_smarty_tpl->getValue('generation')->nom_generation;?>
+">
                                                                     <i class="fas fa-trash"></i>
                                                                 </button>
-                                                                {/if}
+                                                                <?php }?>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                {/foreach}
+                                                <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                             </div>
-                                        {/if}
-                                    {/foreach}
-                                {/if}
-                            {/foreach}
-                        {else}
+                                        <?php }?>
+                                    <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                                <?php }?>
+                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                        <?php } else { ?>
                             <div class="text-center text-muted py-3">
                                 <i class="fas fa-info-circle me-2"></i>Aucune génération trouvée
                             </div>
-                        {/if}
+                        <?php }?>
                     </div>
                 </div>
             </div>
@@ -235,9 +314,18 @@
                         <label for="marqueModele">Marque</label>
                         <select class="form-select" id="marqueModele" name="marqueModele" required>
                             <option value="">Sélectionner une marque</option>
-                            {foreach from=$marques item=marque}
-                            <option value="{$marque->id_marque}">{$marque->nom_marque}</option>
-                            {/foreach}
+                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('marques'), 'marque');
+$foreach6DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('marque')->value) {
+$foreach6DoElse = false;
+?>
+                            <option value="<?php echo $_smarty_tpl->getValue('marque')->id_marque;?>
+"><?php echo $_smarty_tpl->getValue('marque')->nom_marque;?>
+</option>
+                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                         </select>
                     </div>
                     <div class="form-group mb-3">
@@ -269,9 +357,18 @@
                         <label for="marqueGeneration">Marque</label>
                         <select class="form-select" id="marqueGeneration" name="marqueGeneration" required>
                             <option value="">Sélectionner une marque</option>
-                            {foreach from=$marques item=marque}
-                            <option value="{$marque->id_marque}">{$marque->nom_marque}</option>
-                            {/foreach}
+                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('marques'), 'marque');
+$foreach7DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('marque')->value) {
+$foreach7DoElse = false;
+?>
+                            <option value="<?php echo $_smarty_tpl->getValue('marque')->id_marque;?>
+"><?php echo $_smarty_tpl->getValue('marque')->nom_marque;?>
+</option>
+                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                         </select>
                     </div>
                     <div class="form-group mb-3">
@@ -380,3 +477,5 @@
         </div>
     </div>
 </div>
+<?php }
+}
